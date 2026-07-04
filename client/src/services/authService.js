@@ -1,6 +1,21 @@
 import axios from "axios";
+
+const getBaseURL = () => {
+  let url = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  if (url.endsWith("/api")) {
+    url += "/";
+  } else if (!url.endsWith("/api/")) {
+    if (url.endsWith("/")) {
+      url += "api/";
+    } else {
+      url += "/api/";
+    }
+  }
+  return url;
+};
+
 const API = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+  baseURL: getBaseURL(),
 });
 
 const unwrapResponse = (response) => response.data;
@@ -46,14 +61,14 @@ export const getAuthFieldErrors = (error) => {
 };
 
 export const registerUser = async (data) =>
-  unwrapResponse(await API.post("/auth/register", data));
+  unwrapResponse(await API.post("auth/register", data));
 
 export const loginUser = async (data) =>
-  unwrapResponse(await API.post("/auth/login", data));
+  unwrapResponse(await API.post("auth/login", data));
 
 export const getProfile = async (token) =>
   unwrapResponse(
-    await API.get("/auth/profile", {
+    await API.get("auth/profile", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

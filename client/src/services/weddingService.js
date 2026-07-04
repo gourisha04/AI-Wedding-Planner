@@ -1,7 +1,21 @@
 import axios from "axios";
 
+const getBaseURL = () => {
+  let url = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  if (url.endsWith("/api")) {
+    url += "/";
+  } else if (!url.endsWith("/api/")) {
+    if (url.endsWith("/")) {
+      url += "api/";
+    } else {
+      url += "/api/";
+    }
+  }
+  return url;
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: getBaseURL(),
 });
 
 const authHeader = (token) => ({
@@ -9,16 +23,16 @@ const authHeader = (token) => ({
 });
 
 export const createWedding = async (token, data) =>
-  (await API.post("/weddings", data, authHeader(token))).data;
+  (await API.post("weddings", data, authHeader(token))).data;
 
 export const getAllWeddings = async (token) =>
-  (await API.get("/weddings", authHeader(token))).data;
+  (await API.get("weddings", authHeader(token))).data;
 
 export const getWeddingById = async (token, id) =>
-  (await API.get(`/weddings/${id}`, authHeader(token))).data;
+  (await API.get(`weddings/${id}`, authHeader(token))).data;
 
 export const updateWedding = async (token, id, data) =>
-  (await API.put(`/weddings/${id}`, data, authHeader(token))).data;
+  (await API.put(`weddings/${id}`, data, authHeader(token))).data;
 
 export const deleteWedding = async (token, id) =>
-  (await API.delete(`/weddings/${id}`, authHeader(token))).data;
+  (await API.delete(`weddings/${id}`, authHeader(token))).data;
