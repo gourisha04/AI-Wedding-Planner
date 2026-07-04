@@ -1,19 +1,65 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell, Plus, Search } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { getAllWeddings } from "../../services/weddingService";
 
 export default function Navbar({ searchQuery, setSearchQuery }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, text: "AI Video Plan successfully generated for Alia & Ranbir.", time: "Just now", unread: true },
-    { id: 2, text: "New Sangeet shot requirements added to active strategy.", time: "2 hours ago", unread: true },
-    { id: 3, text: "Album cover mockup rules synced with editor standards.", time: "1 day ago", unread: false },
-  ]);
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchNotifications = async () => {
+      try {
+        const res = await getAllWeddings(token);
+        const list = res.data || [];
+
+        if (list.length === 0) {
+          setNotifications([
+            {
+              id: "welcome",
+              text: `Welcome to AI Wedding Planner, ${user?.name || "Planner"}! Create a new wedding project to generate your first AI plan.`,
+              time: "System",
+              unread: true,
+            },
+          ]);
+        } else {
+          const items = list.slice(0, 5).map((w, index) => {
+            const formattedDate = new Date(w.createdAt).toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "short",
+            });
+            
+            if (w.status === "Completed") {
+              return {
+                id: w._id + "-comp",
+                text: `Project completed! Album layout and cinematic strategies generated for ${w.brideName} & ${w.groomName}.`,
+                time: formattedDate,
+                unread: index < 2,
+              };
+            }
+            return {
+              id: w._id + "-gen",
+              text: `AI Plan successfully generated for ${w.brideName} & ${w.groomName}'s ${w.theme || "Traditional"} Wedding.`,
+              time: formattedDate,
+              unread: index < 2,
+            };
+          });
+          setNotifications(items);
+        }
+      } catch (err) {
+        console.error("Failed to load notifications:", err);
+      }
+    };
+
+    fetchNotifications();
+  }, [token, user]);
 
   const unreadCount = notifications.filter((n) => n.unread).length;
 
