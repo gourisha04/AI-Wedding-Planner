@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Bell, Plus, Search } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -6,6 +7,19 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([
+    { id: 1, text: "AI Video Plan successfully generated for Alia & Ranbir.", time: "Just now", unread: true },
+    { id: 2, text: "New Sangeet shot requirements added to active strategy.", time: "2 hours ago", unread: true },
+    { id: 3, text: "Album cover mockup rules synced with editor standards.", time: "1 day ago", unread: false },
+  ]);
+
+  const unreadCount = notifications.filter((n) => n.unread).length;
+
+  const markAllAsRead = () => {
+    setNotifications(notifications.map((n) => ({ ...n, unread: false })));
+  };
 
   const page = {
     "/dashboard": {
@@ -79,12 +93,47 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
             New Wedding
           </button>
 
-          <button
-            className="flex h-11 w-11 items-center justify-center rounded-lg bg-orange-50 text-rose-600 transition hover:bg-orange-100"
-            aria-label="Notifications"
-          >
-            <Bell size={20} />
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative flex h-11 w-11 items-center justify-center rounded-lg bg-orange-50 text-rose-600 transition hover:bg-orange-100 cursor-pointer"
+              aria-label="Notifications"
+            >
+              <Bell size={20} />
+              {unreadCount > 0 && (
+                <span className="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red-600 ring-2 ring-white"></span>
+              )}
+            </button>
+
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-80 rounded-xl border border-orange-100 bg-white p-4 shadow-xl ring-1 ring-black/5 z-50 animate-fade-in">
+                <div className="flex items-center justify-between border-b border-orange-50 pb-2 mb-3">
+                  <h4 className="font-semibold text-gray-800">Notifications</h4>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={markAllAsRead}
+                      className="text-xs font-bold text-rose-600 hover:text-rose-700 cursor-pointer"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-3 max-h-60 overflow-y-auto">
+                  {notifications.map((n) => (
+                    <div
+                      key={n.id}
+                      className={`p-2 rounded-lg text-xs leading-relaxed transition ${
+                        n.unread ? "bg-orange-50/50 font-medium text-gray-800" : "text-gray-500"
+                      }`}
+                    >
+                      <p>{n.text}</p>
+                      <span className="mt-1 block text-[10px] text-gray-400">{n.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-orange-100 bg-gradient-to-br from-rose-500 to-orange-400 text-sm font-bold text-white">

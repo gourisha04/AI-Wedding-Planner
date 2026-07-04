@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
+import { updateProfile } from "../services/authService";
 import { Loader2, Save, Shield, User } from "lucide-react";
 
 export default function Settings() {
@@ -24,14 +24,10 @@ export default function Settings() {
       const payload = { name, phone };
       if (password.trim()) payload.password = password;
 
-      const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/auth/profile`,
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const data = await updateProfile(token, payload);
 
       // Update local auth context
-      login({ token, user: res.data.user });
+      login({ token, user: data.user });
 
       toast.success("Profile updated successfully!");
       setPassword("");

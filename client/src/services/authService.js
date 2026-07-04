@@ -74,3 +74,12 @@ export const getProfile = async (token) =>
       },
     }),
   );
+
+export const updateProfile = async (token, data) =>
+  unwrapResponse(
+    await API.put("auth/profile", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }),
+  );
