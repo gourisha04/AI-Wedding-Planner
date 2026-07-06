@@ -58,21 +58,18 @@ export default function Dashboard() {
       value: String(weddings.length).padStart(2, "0"),
       subtitle: "Active projects",
       icon: FolderOpen,
-      color: "from-rose-600 to-orange-500",
     },
     {
       title: "AI Plans",
       value: String(weddings.filter((w) => w.status === "Ongoing" || w.status === "Completed").length).padStart(2, "0"),
       subtitle: "Generated plans",
       icon: Sparkles,
-      color: "from-stone-800 to-rose-600",
     },
     {
-      title: "Albums",
+      title: "Designed Albums",
       value: String(weddings.filter((w) => w.status === "Completed").length).padStart(2, "0"),
-      subtitle: "Designed albums",
+      subtitle: "Finished layouts",
       icon: Image,
-      color: "from-orange-500 to-amber-400",
     },
   ];
 
@@ -86,78 +83,79 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8">
+    <div className="mx-auto w-full max-w-7xl space-y-8 text-left">
       <Toaster position="top-center" />
-      <div className="flex flex-col gap-4 rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+
+      {/* Welcome Banner Card */}
+      <div className="flex flex-col gap-5 rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-8">
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">
-            Welcome back, {user?.name || "User"} 👋
+          <h2 className="font-marcellus text-2xl sm:text-3xl font-normal text-heading tracking-wide leading-tight">
+            Welcome back, {user?.name || "User"}
           </h2>
-          <p className="mt-1 max-w-2xl text-gray-500">
-            Create cinematic plans, reels, highlight structures, and album
-            layouts from one workspace.
+          <p className="mt-1.5 text-xs text-subtitle uppercase tracking-widest font-semibold">
+            Create cinematic plans, highlights, and custom album layouts
           </p>
         </div>
 
         <button
           onClick={() => navigate("/create-wedding")}
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 px-5 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition hover:-translate-y-0.5 sm:w-auto"
+          className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent px-5 text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 sm:w-auto cursor-pointer"
         >
-          <Plus size={18} />
+          <Plus size={16} />
           New Project
         </button>
       </div>
 
+      {/* Stats Cards Section */}
       <div className="grid gap-5 md:grid-cols-3">
         {stats.map((item) => (
           <div
             key={item.title}
-            className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-6"
+            className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
           >
-            <div
-              className={`mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-r ${item.color}`}
-            >
-              <item.icon className="text-white" size={24} />
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg bg-heading/5 text-heading border border-border-sage/25 shadow-inner">
+              <item.icon size={20} className="text-accent" />
             </div>
 
-            <p className="text-sm font-medium text-gray-500">{item.title}</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-subtitle">{item.title}</p>
 
-            <h2 className="mt-2 text-4xl font-bold text-gray-800">
+            <h2 className="mt-2 font-marcellus text-4xl font-normal text-heading">
               {loading ? "—" : item.value}
             </h2>
 
-            <p className="mt-1 text-sm font-medium text-rose-600">
+            <p className="mt-1 text-xs font-semibold text-accent uppercase tracking-wider">
               {item.subtitle}
             </p>
           </div>
         ))}
       </div>
 
-      <div className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
+      {/* Projects Table Card */}
+      <div className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="font-marcellus text-xl text-heading font-normal tracking-wide">
               Recent Wedding Projects
             </h2>
 
-            <p className="mt-1 text-gray-500">
-              Continue working on your latest wedding plans.
+            <p className="mt-1 text-xs text-subtitle uppercase tracking-widest font-semibold">
+              Continue working on your latest wedding strategies
             </p>
           </div>
         </div>
 
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-rose-500" />
+            <Loader2 className="h-8 w-8 animate-spin text-accent" />
           </div>
         ) : filteredWeddings.length === 0 ? (
-          <div className="py-16 text-center">
-            <FolderOpen className="mx-auto h-16 w-16 text-orange-200" />
-            <h3 className="mt-4 text-xl font-semibold text-gray-700">
+          <div className="py-16 text-center flex flex-col items-center">
+            <FolderOpen className="mx-auto h-16 w-16 text-subtitle/30 mb-4" />
+            <h3 className="text-lg font-semibold text-heading font-marcellus tracking-wide">
               No matching weddings found
             </h3>
-            <p className="mt-2 text-gray-500">
-              Try searching with another name or theme.
+            <p className="mt-2 text-sm text-paragraphs font-light">
+              Try searching with another name or theme configuration.
             </p>
           </div>
         ) : (
@@ -165,28 +163,28 @@ export default function Dashboard() {
             {filteredWeddings.map((item) => (
               <div
                 key={item._id}
-                className="flex flex-col gap-4 rounded-lg border border-orange-100 bg-white p-4 transition-all hover:border-rose-200 hover:bg-orange-50 sm:flex-row sm:items-center sm:justify-between sm:p-5"
+                className="flex flex-col gap-4 rounded-lg border border-border-sage/40 bg-white p-5 transition-all hover:border-accent hover:bg-background/30 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-800">
-                    {item.brideName} & {item.groomName}
+                  <h3 className="font-marcellus text-lg text-heading font-normal tracking-wide leading-tight">
+                    {item.brideName} &amp; {item.groomName}
                   </h3>
 
-                  <p className="mt-2 text-gray-500">
-                    Wedding date: {formatDate(item.weddingDate)}
+                  <p className="mt-2 text-xs font-light text-paragraphs">
+                    Wedding date: <span className="font-semibold text-heading">{formatDate(item.weddingDate)}</span>
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="inline-block rounded-full bg-rose-50 px-3 py-1 text-sm font-semibold text-rose-700">
+                    <span className="inline-block rounded bg-background border border-border-sage/40 px-2.5 py-0.5 text-xs font-medium text-paragraphs">
                       {item.theme || "Traditional"} Theme
                     </span>
                     <span
-                      className={`inline-block rounded-full px-3 py-1 text-sm font-semibold ${
+                      className={`inline-block rounded px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider ${
                         item.status === "Completed"
-                          ? "bg-green-50 text-green-700"
+                          ? "bg-green-50 text-green-700 border border-green-200/50"
                           : item.status === "Ongoing"
-                            ? "bg-blue-50 text-blue-700"
-                            : "bg-orange-50 text-orange-700"
+                            ? "bg-accent/10 text-accent border border-accent/20"
+                            : "bg-subtitle/10 text-subtitle border border-subtitle/20"
                       }`}
                     >
                       {item.status}
@@ -194,20 +192,20 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() => navigate(`/ai-output/${item._id}`)}
-                    className="flex h-11 items-center justify-center gap-2 rounded-lg bg-stone-900 px-4 text-sm font-semibold text-white transition hover:bg-rose-700 sm:w-auto cursor-pointer"
+                    className="flex h-10 items-center justify-center gap-2 rounded-lg bg-heading text-background hover:bg-accent hover:text-white px-4 text-xs font-semibold uppercase tracking-widest transition duration-300 cursor-pointer"
                   >
                     Open Project
-                    <ArrowRight size={18} />
+                    <ArrowRight size={14} />
                   </button>
                   <button
                     onClick={() => handleDeleteWedding(item._id)}
-                    className="flex h-11 w-11 items-center justify-center rounded-lg border border-red-100 bg-red-50 text-red-600 transition hover:bg-red-100 hover:text-red-700 cursor-pointer"
+                    className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/30 text-accent hover:bg-accent hover:text-white transition duration-300 cursor-pointer"
                     title="Delete Project"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>

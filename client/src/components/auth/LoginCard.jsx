@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { WandSparkles } from "lucide-react";
+import { Heart } from "lucide-react";
 import LoginForm from "./LoginForm";
-import SocialLogin from "./SocialLogin";
 
 export default function LoginCard() {
   return (
@@ -10,42 +9,38 @@ export default function LoginCard() {
       initial={{ opacity: 0, y: 32, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.55 }}
-      className="w-full max-w-[520px]"
+      className="w-full max-w-[500px]"
     >
-      <div className="rounded-lg border border-white/60 bg-white/75 px-6 py-8 shadow-[0_24px_70px_rgba(127,29,29,0.16)] backdrop-blur-3xl sm:px-10 sm:py-10">
+      <div className="rounded-lg border border-border-sage bg-background/95 px-6 py-8 shadow-md backdrop-blur-md sm:px-10 sm:py-10 text-left">
+        
+        {/* Heart Logo Icon */}
         <div className="flex justify-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 via-orange-400 to-amber-300 shadow-lg">
-            <WandSparkles className="h-8 w-8 text-white" />
+          <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-heading text-background shadow-md">
+            <Heart className="h-6 w-6 text-accent fill-accent" />
           </div>
         </div>
 
+        {/* Serif Logo & Subtitle */}
         <div className="mt-6 text-center">
-          <h1 className="bg-gradient-to-r from-rose-600 via-orange-500 to-stone-800 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl">
-            AI Wedding Planner
+          <h1 className="font-marcellus text-2xl sm:text-3xl font-normal text-heading uppercase tracking-[0.2em]">
+            AI Wedding<span className="text-accent">.</span>
           </h1>
 
-          <p className="mt-3 text-sm font-medium uppercase tracking-[0.18em] text-stone-600">
-            Plan. Organize. Capture. Celebrate.
+          <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.3em] text-subtitle">
+            Premium Planner Workspace
           </p>
         </div>
 
+        {/* Login Form component */}
         <div className="mt-8">
           <LoginForm />
         </div>
 
-        <div className="my-8 flex items-center">
-          <div className="h-px flex-1 bg-stone-200" />
-          <span className="mx-4 text-sm text-stone-500">Continue with</span>
-          <div className="h-px flex-1 bg-stone-200" />
-        </div>
-
-        <SocialLogin />
-
-        <p className="mt-8 text-center text-sm text-stone-600">
+        <p className="mt-8 text-center text-sm text-paragraphs font-light">
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="font-semibold text-rose-600 transition hover:text-stone-900"
+            className="font-semibold text-accent hover:text-heading transition duration-300"
           >
             Create Account
           </Link>

@@ -10,30 +10,29 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
   const page = {
     "/dashboard": {
       title: "Dashboard",
-      subtitle: "Manage your AI Wedding Projects.",
+      subtitle: "Manage your AI Wedding Projects",
     },
     "/create-wedding": {
-      title: "Create Wedding Project",
-      subtitle: "Enter wedding details and generate an AI planning strategy.",
+      title: "Create Wedding",
+      subtitle: "Generate an AI planning strategy",
     },
     "/settings": {
       title: "Settings",
-      subtitle: "Manage your profile and account preferences.",
+      subtitle: "Manage profile & configurations",
     },
   };
 
-  // Handle dynamic routes like /ai-output/:id
   const getPageMeta = () => {
     if (location.pathname.startsWith("/ai-output")) {
       return {
         title: "AI Wedding Plan",
-        subtitle: "Review the AI-generated wedding video and album plan.",
+        subtitle: "Review AI cinematic structure & layouts",
       };
     }
     return (
       page[location.pathname] || {
         title: "AI Wedding Planner",
-        subtitle: "Premium Wedding Planning Workspace.",
+        subtitle: "Premium Wedding Planning Workspace",
       }
     );
   };
@@ -41,23 +40,28 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
   const current = getPageMeta();
 
   return (
-    <header className="sticky top-0 z-20 border-b border-orange-100 bg-white/95 px-4 py-4 shadow-sm backdrop-blur sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-20 border-b border-border-sage/40 bg-background/95 px-6 py-5 backdrop-blur-md sm:px-8">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+        
+        {/* Page Title & Subtitle */}
         <div className="min-w-0">
-          <h1 className="truncate text-2xl font-bold tracking-tight text-gray-800 sm:text-3xl">
+          <h1 className="font-marcellus text-2xl sm:text-3xl text-heading tracking-wide font-normal truncate">
             {current.title}
           </h1>
 
-          <p className="mt-1 text-sm text-gray-500 sm:text-base">
+          <p className="mt-1 text-xs text-subtitle uppercase tracking-widest font-semibold">
             {current.subtitle}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Action Controls & Profile info */}
+        <div className="flex flex-wrap items-center gap-4">
+          
+          {/* Search Input Box */}
           <div className="relative min-w-[220px] flex-1 sm:flex-none">
             <Search
-              size={18}
-              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+              size={16}
+              className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-subtitle"
             />
 
             <input
@@ -65,34 +69,36 @@ export default function Navbar({ searchQuery, setSearchQuery }) {
               placeholder="Search weddings..."
               value={searchQuery || ""}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-11 w-full rounded-lg border border-gray-200 bg-gray-50 pl-11 pr-4 text-sm outline-none transition focus:border-rose-400 focus:bg-white focus:ring-4 focus:ring-rose-100 sm:w-72"
+              className="h-11 w-full rounded-lg border border-border-sage bg-white/40 pl-11 pr-4 text-sm text-heading placeholder:text-subtitle outline-none transition focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/15 sm:w-64 font-medium"
             />
           </div>
 
+          {/* New Wedding Button */}
           <button
             onClick={() => navigate("/create-wedding")}
-            className="flex h-11 items-center gap-2 rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 px-4 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition hover:-translate-y-0.5"
+            className="flex h-11 items-center gap-2 rounded-lg bg-accent text-white border border-accent px-5 text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 cursor-pointer"
           >
-            <Plus size={18} />
-
-            New Wedding
+            <Plus size={16} />
+            New Project
           </button>
 
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-orange-100 bg-gradient-to-br from-rose-500 to-orange-400 text-sm font-bold text-white">
+          {/* User Profile Avatar block */}
+          <div className="flex min-w-0 items-center gap-3 border-l border-border-sage/40 pl-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent bg-accent text-sm font-bold text-white shadow-sm">
               {user?.name?.charAt(0)?.toUpperCase() || "U"}
             </div>
 
-            <div className="hidden xl:block">
-              <h3 className="font-semibold text-gray-800">
+            <div className="hidden xl:block text-left">
+              <h3 className="text-xs font-bold text-heading uppercase tracking-wider">
                 {user?.name || "User"}
               </h3>
 
-              <p className="text-sm capitalize text-gray-500">
+              <p className="text-[10px] uppercase font-semibold tracking-wider text-subtitle">
                 {user?.role || "Client"}
               </p>
             </div>
           </div>
+
         </div>
       </div>
     </header>

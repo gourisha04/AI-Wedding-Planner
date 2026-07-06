@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Toaster } from "react-hot-toast";
-import { WandSparkles } from "lucide-react";
+import { Heart } from "lucide-react";
 
 import FloatingPetals from "../components/auth/FloatingPetals";
 import SignupForm from "../components/auth/SignupForm";
@@ -17,7 +17,7 @@ function Signup() {
         className="absolute inset-0 h-full w-full scale-105 object-cover"
       />
       <div className="absolute inset-0 bg-stone-950/20 backdrop-blur-[2px]" />
-      <div className="absolute inset-0 bg-gradient-to-br from-rose-100/35 via-white/5 to-amber-100/30" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background/35 via-white/5 to-accent/30" />
 
       <FloatingPetals />
 
@@ -26,20 +26,20 @@ function Signup() {
           initial={{ opacity: 0, y: 32, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.55 }}
-          className="w-full max-w-[520px]"
+          className="w-full max-w-[500px]"
         >
-          <div className="rounded-lg border border-white/60 bg-white/75 px-6 py-8 shadow-[0_24px_70px_rgba(127,29,29,0.16)] backdrop-blur-3xl sm:px-10 sm:py-10">
+          <div className="rounded-lg border border-border-sage bg-background/95 px-6 py-8 shadow-md backdrop-blur-md sm:px-10 sm:py-10 text-left">
             <div className="flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 via-orange-400 to-amber-300 shadow-lg">
-                <WandSparkles className="h-8 w-8 text-white" />
+              <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-heading text-background shadow-md">
+                <Heart className="h-6 w-6 text-accent fill-accent" />
               </div>
             </div>
 
             <div className="mt-6 text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">
+              <h1 className="font-marcellus text-2xl sm:text-3xl font-normal text-heading uppercase tracking-[0.2em]">
                 Create Account
               </h1>
-              <p className="mt-3 text-sm font-medium uppercase tracking-[0.18em] text-stone-600">
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.3em] text-subtitle">
                 Start your AI wedding workspace
               </p>
             </div>

@@ -64,10 +64,10 @@ export default function AIOutput() {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-rose-500" />
-          <p className="mt-4 text-lg font-medium text-gray-600">
-            Loading AI Wedding Plan...
+        <div className="text-center flex flex-col items-center">
+          <Loader2 className="h-10 w-10 animate-spin text-accent" />
+          <p className="mt-4 text-xs font-semibold uppercase tracking-widest text-subtitle">
+            Synthesizing AI Wedding Plan...
           </p>
         </div>
       </div>
@@ -77,15 +77,15 @@ export default function AIOutput() {
   if (error) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="max-w-md rounded-lg bg-white p-8 text-center shadow-sm ring-1 ring-orange-100">
-          <Sparkles className="mx-auto h-12 w-12 text-orange-300" />
-          <h2 className="mt-4 text-2xl font-bold text-gray-800">
+        <div className="max-w-md rounded-lg border border-border-sage/40 bg-white p-8 text-center shadow-sm">
+          <Sparkles className="mx-auto h-12 w-12 text-accent/50 mb-4" />
+          <h2 className="font-marcellus text-2xl text-heading tracking-wide font-normal">
             No AI Plan Found
           </h2>
-          <p className="mt-2 text-gray-500">{error}</p>
+          <p className="mt-2 text-sm text-paragraphs font-light">{error}</p>
           <button
             onClick={() => navigate("/create-wedding")}
-            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 px-6 py-3 font-semibold text-white shadow-lg shadow-orange-500/20 transition hover:-translate-y-0.5"
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent text-white border border-accent px-6 py-2.5 text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300"
           >
             Create New Project
           </button>
@@ -98,35 +98,35 @@ export default function AIOutput() {
   const wedding = videoPlan?.wedding || albumDesign?.wedding || {};
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-6">
+    <div className="mx-auto w-full max-w-7xl space-y-6 text-left">
       <Toaster position="top-center" />
-      {/* Header */}
-      <div className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+      
+      {/* Header Container */}
+      <div className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/20">
-              <Sparkles size={30} />
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-heading text-background shadow-md">
+              <Sparkles size={20} className="text-accent" />
             </div>
 
             <div>
-              <h1 className="text-4xl font-bold text-gray-800">
+              <h1 className="font-marcellus text-2xl sm:text-3xl text-heading tracking-wide font-normal leading-tight">
                 AI Wedding Plan
               </h1>
 
-              <p className="mt-2 max-w-3xl text-gray-500">
-                AI-generated wedding video planning, social-ready reels, and
-                album design recommendations.
+              <p className="mt-1.5 text-xs text-subtitle uppercase tracking-widest font-semibold">
+                Tailored video directions, editing structures, and custom album design assets
               </p>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 rounded-lg border border-orange-100 bg-orange-50/50 px-3 py-1.5">
-              <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">Status:</span>
+            <div className="flex items-center gap-2 rounded-lg border border-border-sage/35 bg-background px-3 py-2">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-subtitle">Status:</span>
               <select
                 value={weddingStatus}
                 onChange={handleStatusChange}
-                className="cursor-pointer bg-transparent text-sm font-bold text-rose-700 outline-none"
+                className="cursor-pointer bg-transparent text-xs font-bold uppercase tracking-wider text-accent outline-none"
               >
                 <option value="Planning">Planning</option>
                 <option value="Ongoing">Ongoing</option>
@@ -136,25 +136,25 @@ export default function AIOutput() {
 
             <button
               onClick={() => navigate("/dashboard")}
-              className="flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+              className="flex h-11 items-center gap-2 rounded-lg border border-border-sage bg-transparent px-4 text-xs uppercase tracking-widest font-semibold text-heading transition hover:bg-background duration-300"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={14} />
               Back
             </button>
 
             <button
               onClick={() => window.print()}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-stone-900 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 sm:w-auto"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-heading text-background border border-heading hover:bg-accent hover:border-accent hover:text-white px-5 text-xs uppercase tracking-widest font-semibold shadow-sm transition duration-300 sm:w-auto"
             >
-              <Download size={18} />
+              <Download size={14} />
               Download PDF
             </button>
           </div>
         </div>
       </div>
 
-      {/* Wedding Summary */}
-      <Section title="Wedding Summary" icon={<CalendarDays size={22} />}>
+      {/* Wedding Summary section */}
+      <Section title="Wedding Summary" icon={<CalendarDays size={20} />}>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Summary title="Bride" value={wedding.brideName || "—"} />
           <Summary title="Groom" value={wedding.groomName || "—"} />
@@ -165,37 +165,37 @@ export default function AIOutput() {
 
       {/* Function-wise Video Plan */}
       {videoPlan?.functionVideos?.length > 0 && (
-        <Section title="Function-wise Video Plan" icon={<Video size={22} />}>
-          <div className="space-y-5">
+        <Section title="Function-wise Video Plan" icon={<Video size={20} />}>
+          <div className="space-y-6">
             {videoPlan.functionVideos.map((segment, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-orange-100 bg-orange-50/50 p-5"
+                className="rounded-lg border border-border-sage/30 bg-background/50 p-6"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-rose-600 text-sm font-semibold text-white">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-heading text-xs font-bold text-background">
                       {index + 1}
                     </div>
-                    <h3 className="text-lg font-bold text-gray-800">
+                    <h3 className="font-marcellus text-lg text-heading font-normal tracking-wide">
                       {segment.title}
                     </h3>
                   </div>
 
-                  <span className="inline-flex items-center rounded-full bg-rose-100 px-3 py-1 text-sm font-medium text-rose-700">
+                  <span className="inline-flex items-center rounded bg-accent/15 px-2.5 py-0.5 text-xs font-semibold text-accent uppercase tracking-wider">
                     {segment.duration}
                   </span>
                 </div>
 
-                <div className="mt-4 grid gap-4 md:grid-cols-3">
+                <div className="mt-5 grid gap-6 md:grid-cols-3">
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Key Shots
+                    <p className="mb-2.5 text-[10px] font-bold uppercase tracking-widest text-subtitle">
+                      Key Shot Directions
                     </p>
-                    <ul className="space-y-1">
+                    <ul className="space-y-2">
                       {segment.shots?.map((shot, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                          <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-rose-500" />
+                        <li key={i} className="flex items-start gap-2 text-sm text-paragraphs font-light">
+                          <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-accent" />
                           {shot}
                         </li>
                       ))}
@@ -203,21 +203,21 @@ export default function AIOutput() {
                   </div>
 
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Mood
+                    <p className="mb-2.5 text-[10px] font-bold uppercase tracking-widest text-subtitle">
+                      Color Mood
                     </p>
-                    <p className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                      <Palette size={14} className="text-rose-500" />
+                    <p className="flex items-center gap-2 text-sm font-medium text-heading">
+                      <Palette size={14} className="text-accent" />
                       {segment.mood}
                     </p>
                   </div>
 
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Music
+                    <p className="mb-2.5 text-[10px] font-bold uppercase tracking-widest text-subtitle">
+                      Music suggestion
                     </p>
-                    <p className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                      <Music size={14} className="text-rose-500" />
+                    <p className="flex items-center gap-2 text-sm font-medium text-heading">
+                      <Music size={14} className="text-accent" />
                       {segment.musicSuggestion}
                     </p>
                   </div>
@@ -230,21 +230,21 @@ export default function AIOutput() {
 
       {/* Highlight Video Structure */}
       {videoPlan?.highlightStructure?.length > 0 && (
-        <Section title="Wedding Highlight Structure" icon={<Film size={22} />}>
+        <Section title="Wedding Highlight Structure" icon={<Film size={20} />}>
           <div className="space-y-4">
             {videoPlan.highlightStructure.map((item) => (
               <div key={item.order} className="flex items-start gap-4">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-rose-600 text-sm font-semibold text-white">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-heading text-xs font-bold text-background">
                   {item.order}
                 </div>
 
-                <div className="min-h-9 flex-1 rounded-lg border border-orange-100 bg-orange-50 px-4 py-3">
+                <div className="min-h-8 flex-1 rounded-lg border border-border-sage/30 bg-background/40 px-5 py-4">
                   <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                    <p className="font-semibold text-gray-800">{item.title}</p>
-                    <span className="text-sm font-medium text-rose-600">{item.duration}</span>
+                    <p className="font-semibold text-heading text-sm">{item.title}</p>
+                    <span className="text-xs font-bold text-accent uppercase tracking-wider">{item.duration}</span>
                   </div>
                   {item.description && (
-                    <p className="mt-1 text-sm text-gray-600">{item.description}</p>
+                    <p className="mt-2 text-xs font-light text-paragraphs leading-relaxed">{item.description}</p>
                   )}
                 </div>
               </div>
@@ -252,9 +252,9 @@ export default function AIOutput() {
           </div>
 
           {videoPlan.totalEstimatedDuration && (
-            <div className="mt-5 rounded-lg bg-stone-900 p-4 text-center">
-              <p className="text-sm font-medium text-stone-400">Total Estimated Duration</p>
-              <p className="mt-1 text-2xl font-bold text-white">{videoPlan.totalEstimatedDuration}</p>
+            <div className="mt-6 rounded-lg border border-border-sage/40 bg-white p-5 text-center">
+              <p className="text-xs font-semibold uppercase tracking-widest text-subtitle">Total Estimated Highlight Reels</p>
+              <p className="mt-1 font-marcellus text-2xl font-normal text-heading">{videoPlan.totalEstimatedDuration}</p>
             </div>
           )}
         </Section>
@@ -262,30 +262,30 @@ export default function AIOutput() {
 
       {/* Reel Plans */}
       {videoPlan?.reelPlans?.length > 0 && (
-        <Section title="Social Media Reel Plans" icon={<Film size={22} />}>
-          <div className="grid gap-4 md:grid-cols-2">
+        <Section title="Social Media Reel Plans" icon={<Film size={20} />}>
+          <div className="grid gap-5 md:grid-cols-2">
             {videoPlan.reelPlans.map((reel, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-orange-100 bg-orange-50/50 p-5 transition hover:border-rose-200 hover:shadow-sm"
+                className="rounded-lg border border-border-sage/40 bg-white p-5 transition hover:border-accent duration-300"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-gray-800">{reel.title}</h3>
-                  <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-semibold text-rose-700">
+                  <h3 className="font-marcellus text-base text-heading font-normal tracking-wide">{reel.title}</h3>
+                  <span className="rounded bg-accent/15 px-2.5 py-0.5 text-[10px] font-semibold text-accent uppercase tracking-wider">
                     {reel.duration}
                   </span>
                 </div>
 
-                <p className="mt-2 text-sm text-gray-600">{reel.concept}</p>
+                <p className="mt-3 text-xs leading-relaxed text-paragraphs font-light">{reel.concept}</p>
 
                 {reel.hashtags?.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {reel.hashtags.map((tag, i) => (
                       <span
                         key={i}
-                        className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-0.5 text-xs font-medium text-gray-600"
+                        className="inline-flex items-center gap-1 rounded bg-background border border-border-sage/35 px-2.5 py-0.5 text-[10px] font-medium text-paragraphs"
                       >
-                        <Hash size={10} />
+                        <Hash size={9} />
                         {tag.replace("#", "")}
                       </span>
                     ))}
@@ -299,38 +299,39 @@ export default function AIOutput() {
 
       {/* Album Layout */}
       {albumDesign && (
-        <Section title="Album Design Layout" icon={<Image size={22} />}>
+        <Section title="Album Design Layout" icon={<Image size={20} />}>
+          
           {/* Album meta */}
           <div className="mb-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-lg bg-orange-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Theme</p>
-              <p className="mt-1 font-semibold text-gray-800">{albumDesign.themeSuggestion}</p>
+            <div className="rounded-lg border border-border-sage/30 bg-background p-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-subtitle">Theme Suggestion</p>
+              <p className="mt-1 font-semibold text-heading text-sm">{albumDesign.themeSuggestion}</p>
             </div>
-            <div className="rounded-lg bg-orange-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Cover Style</p>
-              <p className="mt-1 font-semibold text-gray-800">{albumDesign.coverDesign?.style}</p>
+            <div className="rounded-lg border border-border-sage/30 bg-background p-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-subtitle">Cover Style Option</p>
+              <p className="mt-1 font-semibold text-heading text-sm">{albumDesign.coverDesign?.style}</p>
             </div>
-            <div className="rounded-lg bg-orange-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Total Pages</p>
-              <p className="mt-1 font-semibold text-gray-800">{albumDesign.totalPages}</p>
+            <div className="rounded-lg border border-border-sage/30 bg-background p-4">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-subtitle">Total Recommended Pages</p>
+              <p className="mt-1 font-semibold text-heading text-sm">{albumDesign.totalPages}</p>
             </div>
           </div>
 
           {/* Color palette */}
           {albumDesign.colorPalette?.length > 0 && (
-            <div className="mb-6">
-              <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-700">
-                <Palette size={16} className="text-rose-500" />
-                Color Palette
+            <div className="mb-8">
+              <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-subtitle">
+                <Palette size={14} className="text-accent" />
+                Color Palette Selection
               </p>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 {albumDesign.colorPalette.map((color, i) => (
                   <div key={i} className="text-center">
                     <div
-                      className="h-12 w-12 rounded-lg border border-gray-200 shadow-sm"
+                      className="h-10 w-10 rounded-lg border border-border-sage/40 shadow-sm"
                       style={{ backgroundColor: color }}
                     />
-                    <p className="mt-1 text-xs font-medium text-gray-500">{color}</p>
+                    <p className="mt-1.5 text-[10px] font-semibold text-paragraphs">{color}</p>
                   </div>
                 ))}
               </div>
@@ -339,16 +340,16 @@ export default function AIOutput() {
 
           {/* Typography */}
           {albumDesign.typography && (
-            <div className="mb-6 flex flex-wrap gap-4">
-              <div className="flex items-center gap-2 rounded-lg bg-orange-50 px-4 py-2">
-                <Type size={16} className="text-rose-500" />
-                <span className="text-sm text-gray-600">Heading:</span>
-                <span className="text-sm font-semibold text-gray-800">{albumDesign.typography.headingFont}</span>
+            <div className="mb-8 flex flex-wrap gap-4">
+              <div className="flex items-center gap-2 rounded bg-background border border-border-sage/30 px-3.5 py-1.5">
+                <Type size={14} className="text-accent" />
+                <span className="text-xs text-subtitle uppercase tracking-widest font-semibold">Heading:</span>
+                <span className="text-xs font-bold text-heading">{albumDesign.typography.headingFont}</span>
               </div>
-              <div className="flex items-center gap-2 rounded-lg bg-orange-50 px-4 py-2">
-                <Type size={16} className="text-rose-500" />
-                <span className="text-sm text-gray-600">Body:</span>
-                <span className="text-sm font-semibold text-gray-800">{albumDesign.typography.bodyFont}</span>
+              <div className="flex items-center gap-2 rounded bg-background border border-border-sage/30 px-3.5 py-1.5">
+                <Type size={14} className="text-accent" />
+                <span className="text-xs text-subtitle uppercase tracking-widest font-semibold">Body Font:</span>
+                <span className="text-xs font-bold text-heading">{albumDesign.typography.bodyFont}</span>
               </div>
             </div>
           )}
@@ -358,24 +359,24 @@ export default function AIOutput() {
             {albumDesign.pages?.map((page) => (
               <div
                 key={page.pageNumber}
-                className="rounded-lg border border-orange-100 bg-white p-4 transition hover:border-rose-200 hover:shadow-sm"
+                className="rounded-lg border border-border-sage/40 bg-white p-5 transition hover:border-accent duration-300"
               >
                 <div className="flex items-center justify-between">
-                  <span className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-bold text-rose-700">
+                  <span className="rounded bg-accent/15 px-2.5 py-0.5 text-[10px] font-bold text-accent uppercase tracking-wider">
                     Page {page.pageNumber}
                   </span>
-                  <span className="text-xs font-medium text-gray-500">{page.layout}</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-subtitle">{page.layout}</span>
                 </div>
 
-                <h4 className="mt-3 font-semibold text-gray-800">{page.title}</h4>
-                <p className="mt-1 text-sm text-gray-500">{page.description}</p>
+                <h4 className="mt-3 font-marcellus text-base text-heading font-normal tracking-wide">{page.title}</h4>
+                <p className="mt-2 text-xs leading-relaxed text-paragraphs font-light">{page.description}</p>
 
                 {page.suggestedPhotos?.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1">
+                  <div className="mt-4 flex flex-wrap gap-1">
                     {page.suggestedPhotos.map((photo, i) => (
                       <span
                         key={i}
-                        className="rounded bg-orange-50 px-2 py-0.5 text-xs font-medium text-gray-600"
+                        className="rounded bg-background border border-border-sage/30 px-2 py-0.5 text-[10px] font-medium text-paragraphs"
                       >
                         {photo}
                       </span>
@@ -390,7 +391,7 @@ export default function AIOutput() {
 
       {/* AI Suggestions */}
       {(videoPlan?.suggestions?.length > 0 || albumDesign?.suggestions?.length > 0) && (
-        <Section title="AI Suggestions for Editors" icon={<Sparkles size={22} />}>
+        <Section title="AI Suggestions for Editors" icon={<Sparkles size={20} />}>
           <div className="space-y-3">
             {videoPlan?.suggestions?.map((text, i) => (
               <Suggestion key={`v-${i}`} text={text} tag="Video" />
@@ -407,13 +408,13 @@ export default function AIOutput() {
 
 function Section({ title, icon, children }) {
   return (
-    <section className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
+    <section className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-rose-600">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-heading/5 text-accent border border-border-sage/20">
           {icon}
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
+        <h2 className="font-marcellus text-xl text-heading tracking-wide font-normal">{title}</h2>
       </div>
 
       {children}
@@ -423,20 +424,20 @@ function Section({ title, icon, children }) {
 
 function Summary({ title, value }) {
   return (
-    <div className="rounded-lg bg-orange-50 p-4">
-      <p className="text-sm font-medium text-gray-500">{title}</p>
-      <h3 className="mt-2 text-lg font-semibold text-gray-800">{value}</h3>
+    <div className="rounded-lg border border-border-sage/30 bg-background p-4">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-subtitle">{title}</p>
+      <h3 className="mt-1 text-sm font-semibold text-heading font-marcellus tracking-wide truncate">{value}</h3>
     </div>
   );
 }
 
 function Suggestion({ text, tag }) {
   return (
-    <div className="flex items-start gap-3 rounded-lg border-l-4 border-rose-600 bg-orange-50 px-4 py-3">
-      <span className="shrink-0 rounded bg-rose-100 px-2 py-0.5 text-xs font-bold text-rose-700">
+    <div className="flex items-start gap-3 rounded-lg border-l-4 border-accent bg-background/60 px-4 py-3">
+      <span className="shrink-0 rounded bg-accent/15 px-2.5 py-0.5 text-[10px] uppercase tracking-wider font-bold text-accent">
         {tag}
       </span>
-      <p className="text-gray-700">{text}</p>
+      <p className="text-xs font-light text-paragraphs leading-relaxed">{text}</p>
     </div>
   );
 }

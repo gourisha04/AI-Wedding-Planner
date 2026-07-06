@@ -12,7 +12,7 @@ import {
 } from "../../services/authService";
 
 const inputClass =
-  "h-14 w-full rounded-lg border border-stone-200 bg-white/85 py-3 pl-14 pr-4 text-sm text-stone-800 shadow-sm outline-none transition placeholder:text-stone-400 focus:border-rose-400 focus:bg-white focus:ring-4 focus:ring-rose-100";
+  "h-14 w-full rounded-lg border border-border-sage bg-white/60 py-3 pl-14 pr-4 text-sm text-heading shadow-sm outline-none transition placeholder:text-subtitle/80 focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/15";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -55,14 +55,14 @@ export default function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-left">
       <FieldError error={errors.email}>
-        <label className="mb-2 block text-sm font-semibold text-stone-700">
+        <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-subtitle">
           Email Address
         </label>
         <div className="relative">
           <Mail
-            className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-rose-500"
+            className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-accent"
             size={18}
           />
           <input
@@ -76,12 +76,12 @@ export default function LoginForm() {
       </FieldError>
 
       <FieldError error={errors.password}>
-        <label className="mb-2 block text-sm font-semibold text-stone-700">
+        <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-subtitle">
           Password
         </label>
         <div className="relative">
           <Lock
-            className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-rose-500"
+            className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-accent"
             size={18}
           />
           <input
@@ -94,7 +94,7 @@ export default function LoginForm() {
           <button
             type="button"
             onClick={() => setShowPassword((value) => !value)}
-            className="absolute right-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-stone-500 transition hover:bg-rose-50 hover:text-rose-600"
+            className="absolute right-4 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-subtitle transition hover:bg-accent/10 hover:text-accent"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -102,15 +102,15 @@ export default function LoginForm() {
         </div>
       </FieldError>
 
-      <div className="flex flex-col gap-3 text-sm text-stone-600 sm:flex-row sm:items-center sm:justify-between">
-        <label className="flex items-center gap-2">
-          <input type="checkbox" className="h-4 w-4 accent-rose-500" />
+      <div className="flex flex-col gap-3 text-xs uppercase tracking-wider font-semibold text-subtitle sm:flex-row sm:items-center sm:justify-between">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" className="h-4 w-4 accent-accent rounded border-border-sage" />
           Remember me
         </label>
 
         <Link
           to="/forgot-password"
-          className="font-medium text-rose-600 transition hover:text-stone-900"
+          className="text-accent hover:text-heading transition duration-300"
         >
           Forgot Password?
         </Link>
@@ -119,7 +119,7 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="group flex h-14 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 px-5 text-sm font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-orange-500/20 transition hover:-translate-y-0.5 hover:shadow-orange-500/30 disabled:translate-y-0 disabled:opacity-70"
+        className="group flex h-14 w-full items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent px-5 text-xs uppercase tracking-widest font-bold shadow-sm transition hover:bg-heading hover:border-heading duration-300 disabled:opacity-70 cursor-pointer"
       >
         {isSubmitting ? (
           "Signing In..."
@@ -128,7 +128,7 @@ export default function LoginForm() {
             Login
             <ArrowRight
               className="transition group-hover:translate-x-1"
-              size={18}
+              size={14}
             />
           </>
         )}
@@ -142,7 +142,7 @@ function FieldError({ error, children }) {
     <div>
       {children}
       {error ? (
-        <p className="mt-2 text-sm font-medium text-red-600">
+        <p className="mt-2 text-xs font-semibold text-red-600">
           {error.message}
         </p>
       ) : null}

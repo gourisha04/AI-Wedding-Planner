@@ -93,28 +93,29 @@ export default function CreateWedding() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-8">
+    <div className="mx-auto w-full max-w-7xl space-y-8 text-left">
       <Toaster position="top-center" />
 
-      <div className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/20">
-            <Sparkles size={30} />
+      {/* Header card */}
+      <div className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-heading text-background shadow-md">
+            <Sparkles size={20} className="text-accent" />
           </div>
 
           <div>
-            <h1 className="text-4xl font-bold text-gray-800">
+            <h1 className="font-marcellus text-2xl sm:text-3xl text-heading tracking-wide font-normal leading-tight">
               Create Wedding Project
             </h1>
 
-            <p className="mt-2 max-w-3xl text-gray-500">
-              Enter wedding details and let AI generate a professional wedding
-              video plan, highlight structure and album design.
+            <p className="mt-1.5 text-xs text-subtitle uppercase tracking-widest font-semibold">
+              Fill details to configure AI-powered shot structures and color-match designs
             </p>
           </div>
         </div>
       </div>
 
+      {/* Form sections */}
       <div className="space-y-6">
         <WeddingInfoForm values={weddingInfo} onChange={setWeddingInfo} />
         <FunctionSelector selected={selectedFunctions} onChange={setSelectedFunctions} />
@@ -122,32 +123,33 @@ export default function CreateWedding() {
         <SpecialRequirements value={specialRequirements} onChange={setSpecialRequirements} />
       </div>
 
-      <div className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
+      {/* Bottom prompt panel */}
+      <div className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-gray-800">
+            <h2 className="font-marcellus text-lg text-heading tracking-wide font-normal">
               Ready to generate?
             </h2>
 
-            <p className="mt-1 text-gray-500">
-              AI will generate your complete wedding planning strategy.
+            <p className="mt-1 text-xs text-subtitle uppercase tracking-widest font-semibold">
+              Our AI engine will synthesize shot sequences & style suggestions
             </p>
           </div>
 
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 px-6 font-semibold text-white shadow-lg shadow-orange-500/20 transition-all duration-300 hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-70 sm:w-auto"
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent px-6 text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 disabled:opacity-75 sm:w-auto cursor-pointer"
           >
             {loading ? (
               <>
-                <Loader2 size={20} className="animate-spin" />
-                Generating...
+                <Loader2 size={16} className="animate-spin" />
+                Generating Plan...
               </>
             ) : (
               <>
                 Generate AI Plan
-                <ChevronRight size={20} />
+                <ChevronRight size={16} />
               </>
             )}
           </button>

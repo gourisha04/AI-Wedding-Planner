@@ -3,7 +3,7 @@ import {
   FolderHeart,
   Settings,
   LogOut,
-  HeartHandshake,
+  Heart,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -36,21 +36,23 @@ export default function SideBar() {
   };
 
   return (
-    <aside className="hidden h-screen w-72 shrink-0 flex-col border-r border-orange-100 bg-white shadow-sm lg:flex">
-      <div className="border-b border-orange-100 px-7 py-8">
-        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/20">
-          <HeartHandshake size={30} />
+    <aside className="hidden h-screen w-72 shrink-0 flex-col border-r border-border-sage/40 bg-background shadow-sm lg:flex">
+      {/* Brand Header */}
+      <div className="border-b border-border-sage/40 px-7 py-8">
+        <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-heading text-background shadow-md">
+          <Heart size={24} className="fill-accent text-accent" />
         </div>
 
-        <h1 className="text-2xl font-bold tracking-tight text-gray-800">
-          AI Wedding Planner
+        <h1 className="font-marcellus text-xl font-normal tracking-[0.2em] text-heading uppercase leading-tight">
+          AI Wedding<span className="text-accent">.</span>
         </h1>
 
-        <p className="mt-2 text-sm leading-6 text-gray-500">
-          Premium Planning Workspace
+        <p className="mt-1 text-[9px] tracking-[0.3em] font-semibold uppercase text-subtitle">
+          Premium Workspace
         </p>
       </div>
 
+      {/* Navigation Links */}
       <nav className="flex-1 space-y-2 px-4 py-6">
         {menu.map((item) => {
           const Icon = item.icon;
@@ -60,19 +62,19 @@ export default function SideBar() {
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `group relative flex items-center gap-4 rounded-lg px-4 py-3 text-[15px] font-medium transition-all duration-300 ${
+                `group relative flex items-center gap-4 rounded-lg px-4 py-3 text-[14px] font-semibold uppercase tracking-wider transition-all duration-300 ${
                   isActive
-                    ? "bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/20"
-                    : "text-gray-600 hover:bg-orange-50 hover:text-rose-700"
+                    ? "bg-heading text-background shadow-sm"
+                    : "text-paragraphs hover:bg-accent/10 hover:text-heading"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
                   {isActive && (
-                    <span className="absolute left-0 h-8 w-1 rounded-r-full bg-white" />
+                    <span className="absolute left-0 h-6 w-1 rounded-r-full bg-accent" />
                   )}
-                  <Icon size={20} />
+                  <Icon size={18} className={isActive ? "text-accent" : "text-subtitle group-hover:text-heading"} />
 
                   <span>{item.name}</span>
                 </>
@@ -82,13 +84,13 @@ export default function SideBar() {
         })}
       </nav>
 
-      <div className="border-t border-orange-100 p-4">
+      {/* Logout button footer */}
+      <div className="border-t border-border-sage/40 p-4">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center justify-center gap-3 rounded-lg border border-rose-100 bg-rose-50 px-5 py-3 font-semibold text-rose-700 transition hover:bg-rose-100"
+          className="flex w-full items-center justify-center gap-3 rounded-lg border border-heading bg-transparent px-5 py-3 text-xs uppercase tracking-widest font-semibold text-heading transition duration-300 hover:bg-heading hover:text-background"
         >
-          <LogOut size={20} />
-
+          <LogOut size={16} />
           Logout
         </button>
       </div>

@@ -41,69 +41,71 @@ export default function Settings() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-5xl space-y-6">
+    <div className="mx-auto w-full max-w-5xl space-y-6 text-left">
       <Toaster position="top-center" />
 
-      <div className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
-        <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/20">
-            <User size={28} />
+      {/* Header block */}
+      <div className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex items-center gap-5">
+          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-heading text-background shadow-md">
+            <User size={20} className="text-accent" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Settings</h1>
-            <p className="mt-1 text-gray-500">
-              Manage your profile and account preferences.
+            <h1 className="font-marcellus text-2xl sm:text-3xl text-heading tracking-wide font-normal leading-tight">Settings</h1>
+            <p className="mt-1.5 text-xs text-subtitle uppercase tracking-widest font-semibold">
+              Manage profile metadata and application credentials
             </p>
           </div>
         </div>
       </div>
 
-      <div className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
-        <h2 className="mb-6 text-xl font-bold text-gray-800">
+      {/* Settings Form Panel */}
+      <div className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
+        <h2 className="mb-6 font-marcellus text-lg text-heading font-normal tracking-wide">
           Profile Information
         </h2>
 
         <div className="grid gap-5">
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-subtitle">
               Full Name
             </label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Full Name"
-              className="h-12 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+              className="h-12 w-full rounded-lg border border-border-sage bg-white/40 px-4 text-sm text-heading placeholder:text-subtitle outline-none transition focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/15"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-subtitle">
               Email Address
             </label>
             <input
               value={user?.email || ""}
               disabled
-              className="h-12 w-full rounded-lg border border-gray-200 bg-gray-50 px-4 text-sm text-gray-500"
+              className="h-12 w-full rounded-lg border border-border-sage/40 bg-background px-4 text-sm text-subtitle/85 cursor-not-allowed"
             />
-            <p className="mt-1 text-xs text-gray-400">
-              Email cannot be changed.
+            <p className="mt-1.5 text-[10px] uppercase font-semibold tracking-wider text-subtitle/80">
+              Primary email identity cannot be changed
             </p>
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-subtitle">
               Phone Number
             </label>
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone Number"
-              className="h-12 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+              className="h-12 w-full rounded-lg border border-border-sage bg-white/40 px-4 text-sm text-heading placeholder:text-subtitle outline-none transition focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/15"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-subtitle">
               Change Password
             </label>
             <input
@@ -111,23 +113,23 @@ export default function Settings() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter new password (leave blank to keep current)"
               type="password"
-              className="h-12 w-full rounded-lg border border-gray-200 px-4 text-sm outline-none transition placeholder:text-gray-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100"
+              className="h-12 w-full rounded-lg border border-border-border-sage bg-white/40 px-4 text-sm text-heading placeholder:text-subtitle outline-none transition focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/15"
             />
           </div>
 
           <button
             onClick={handleSave}
             disabled={loading}
-            className="flex h-12 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-rose-600 via-orange-500 to-amber-400 px-5 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-70 sm:w-max"
+            className="flex h-11 items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent px-5 text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 disabled:opacity-70 sm:w-max cursor-pointer mt-2"
           >
             {loading ? (
               <>
-                <Loader2 size={18} className="animate-spin" />
-                Saving...
+                <Loader2 size={16} className="animate-spin" />
+                Saving Changes...
               </>
             ) : (
               <>
-                <Save size={18} />
+                <Save size={16} />
                 Save Changes
               </>
             )}
@@ -135,26 +137,27 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="rounded-lg bg-white p-5 shadow-sm ring-1 ring-orange-100 sm:p-6 lg:p-8">
-        <div className="flex items-center gap-3">
-          <Shield size={20} className="text-rose-600" />
-          <h2 className="text-xl font-bold text-gray-800">Account Info</h2>
+      {/* Account Info Panel */}
+      <div className="rounded-lg border border-border-sage/40 bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex items-center gap-3 border-b border-border-sage/30 pb-4 mb-6">
+          <Shield size={18} className="text-accent" />
+          <h2 className="font-marcellus text-lg text-heading font-normal tracking-wide">Account Details</h2>
         </div>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-lg bg-orange-50 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-              Role
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-lg border border-border-sage/30 bg-background p-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-subtitle">
+              User Role
             </p>
-            <p className="mt-1 font-semibold capitalize text-gray-800">
+            <p className="mt-1 font-semibold capitalize text-heading text-sm">
               {user?.role || "client"}
             </p>
           </div>
-          <div className="rounded-lg bg-orange-50 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-              Member Since
+          <div className="rounded-lg border border-border-sage/30 bg-background p-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-subtitle">
+              Registration Date
             </p>
-            <p className="mt-1 font-semibold text-gray-800">
+            <p className="mt-1 font-semibold text-heading text-sm">
               {user?.createdAt
                 ? new Date(user.createdAt).toLocaleDateString("en-IN", {
                     day: "numeric",
@@ -164,11 +167,11 @@ export default function Settings() {
                 : "—"}
             </p>
           </div>
-          <div className="rounded-lg bg-orange-50 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
-              Account ID
+          <div className="rounded-lg border border-border-sage/30 bg-background p-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-subtitle">
+              Access ID Reference
             </p>
-            <p className="mt-1 truncate font-mono text-sm font-semibold text-gray-800">
+            <p className="mt-1.5 truncate font-mono text-xs font-semibold text-heading">
               {user?.id || "—"}
             </p>
           </div>
