@@ -5,13 +5,13 @@
   --font-cursive: "Homemade Apple", cursive;
   --font-montserrat: "Montserrat", sans-serif;
   
-  --color-background: #f6f4ec;
-  --color-paragraphs: #6d705e;
-  --color-heading: #545748;
-  --color-accent: #de967d;
-  --color-subtitle: #a0a48e;
-  --color-border-sage: rgba(160, 164, 142, 0.5);
-  --color-preload: #ede9db;
+  --color-background: #FAF9F6;
+  --color-paragraphs: #3F4941;
+  --color-heading: #122416;
+  --color-accent: #E25E3E;
+  --color-subtitle: #728477;
+  --color-border-sage: rgba(114, 132, 119, 0.35);
+  --color-preload: #F2F0E8;
 }
 
 * {
@@ -19,14 +19,14 @@
 }
 
 html {
-  background: #f6f4ec;
+  background: #FAF9F6;
 }
 
 body {
   min-width: 320px;
   font-family: "Montserrat", sans-serif;
-  background-color: #f6f4ec;
-  color: #6d705e;
+  background-color: #FAF9F6;
+  color: #3F4941;
   line-height: 1.8;
 }
 
@@ -46,8 +46,8 @@ button:disabled {
 }
 
 ::selection {
-  background: #fecdd3;
-  color: #7f1d1d;
+  background: rgba(226, 94, 62, 0.2);
+  color: #122416;
 }
 
 @media print {
@@ -92,4 +92,3 @@ button:disabled {
     margin-bottom: 2rem !important;
   }
 }
-

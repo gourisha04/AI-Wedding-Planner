@@ -49,8 +49,14 @@ export const getAuthFieldErrors = (error) => {
     fieldErrors.password = "Email and password are required.";
   }
 
-  if (message.includes("invalid email")) {
-    fieldErrors.email = "Invalid email.";
+  // Handle wrong credentials specifically
+  if (message.includes("invalid email or password")) {
+    fieldErrors.email = "Email or password is incorrect.";
+    fieldErrors.password = "Email or password is incorrect.";
+  } 
+  // Handle syntax email error format only if not credentials
+  else if (message.includes("invalid email")) {
+    fieldErrors.email = "Invalid email format.";
   }
 
   if (message.includes("password must be at least 6")) {
