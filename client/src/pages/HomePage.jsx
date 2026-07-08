@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Heart, Menu, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart } from "lucide-react";
 import FloatingPetals from "../components/auth/FloatingPetals";
+import Header from "../components/common/Header";
+import Footer from "../components/common/Footer";
 
 // Image Imports (8 original + 4 new gallery additions)
 import heroNorthIndian from "../assets/images/hero_north_indian.png";
@@ -127,7 +129,6 @@ const portfolios = [
 ];
 
 export default function HomePage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
@@ -163,70 +164,7 @@ export default function HomePage() {
       <FloatingPetals />
 
       {/* ─── NAVBAR ─── */}
-      <nav className="sticky top-0 z-50 border-b border-border-sage bg-background/90 backdrop-blur-md py-5 transition-all">
-        <div className="mx-auto max-w-7xl px-6 sm:px-12 flex items-center justify-between">
-          
-          {/* Mobile Menu Icon */}
-          <button 
-            className="md:hidden text-heading hover:text-accent transition"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-
-          {/* Left Navigation Grid (Desktop) */}
-          <div className="hidden md:flex items-center space-x-10 text-xs font-semibold uppercase tracking-widest text-heading">
-            <a href="#features" className="hover:text-accent transition duration-300">Features</a>
-            <a href="#about" className="hover:text-accent transition duration-300">About</a>
-            <a href="#gallery" className="hover:text-accent transition duration-300">Gallery</a>
-          </div>
-
-          {/* Centered Elegant Brand Name */}
-          <Link to="/" className="text-center flex flex-col items-center">
-            <span className="font-marcellus text-2xl font-normal tracking-[0.25em] text-heading leading-tight uppercase">
-              AI Wedding<span className="text-accent">.</span>
-            </span>
-            <span className="text-[9px] tracking-[0.4em] font-semibold uppercase text-subtitle mt-0.5">
-              Premium Planner
-            </span>
-          </Link>
-
-          {/* Right Navigation Grid (Desktop) */}
-          <div className="hidden md:flex items-center space-x-10 text-xs font-semibold uppercase tracking-widest text-heading">
-            <a href="#testimonials" className="hover:text-accent transition duration-300">Journal</a>
-            <Link to="/login" className="hover:text-accent transition duration-300">Sign In</Link>
-            <Link 
-              to="/signup" 
-              className="border border-border-sage px-5 py-2 hover:bg-heading hover:text-background hover:border-heading transition duration-300"
-            >
-              Get Started
-            </Link>
-          </div>
-
-          {/* Mobile Cart/Sign In Trigger (Minimalist) */}
-          <div className="md:hidden">
-            <Link to="/login" className="text-xs uppercase font-semibold tracking-widest text-heading hover:text-accent transition">
-              Sign In
-            </Link>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="md:hidden border-b border-border-sage bg-background px-6 py-6 space-y-4 flex flex-col text-sm uppercase tracking-widest font-semibold text-heading"
-          >
-            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-accent transition">Features</a>
-            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="hover:text-accent transition">About</a>
-            <a href="#gallery" onClick={() => setMobileMenuOpen(false)} className="hover:text-accent transition">Gallery</a>
-            <a href="#testimonials" onClick={() => setMobileMenuOpen(false)} className="hover:text-accent transition">Journal</a>
-            <Link to="/signup" onClick={() => setMobileMenuOpen(false)} className="text-center block border border-border-sage py-2.5 hover:bg-heading hover:text-background transition">Get Started</Link>
-          </motion.div>
-        )}
-      </nav>
+      <Header />
 
       {/* ─── HERO SECTION (Lovio Home A Style) ─── */}
       <section className="relative px-6 py-12 sm:px-12 sm:py-20 lg:py-24">
@@ -391,7 +329,7 @@ export default function HomePage() {
 
                 {/* Cursive or clean underlined link */}
                 <Link 
-                  to="/signup" 
+                  to="/features" 
                   className="text-xs uppercase font-semibold tracking-widest text-heading hover:text-accent transition duration-300 border-b border-heading/30 hover:border-accent pb-0.5"
                 >
                   {service.linkText}
@@ -432,10 +370,10 @@ export default function HomePage() {
               </p>
 
               <Link 
-                to="/signup" 
+                to="/about" 
                 className="border border-heading px-8 py-3.5 text-xs font-semibold uppercase tracking-widest text-heading hover:bg-heading hover:text-background transition duration-300"
               >
-                Explore Planner
+                Explore Our Story
               </Link>
             </motion.div>
 
@@ -516,6 +454,15 @@ export default function HomePage() {
             ))}
           </div>
 
+          <div className="mt-12 flex justify-center">
+            <Link 
+              to="/gallery" 
+              className="border border-heading px-8 py-3.5 text-xs font-semibold uppercase tracking-widest text-heading hover:bg-heading hover:text-background transition duration-300"
+            >
+              View Full Gallery
+            </Link>
+          </div>
+
         </div>
       </section>
 
@@ -579,6 +526,15 @@ export default function HomePage() {
             >
               <ArrowRight size={16} />
             </button>
+          </div>
+
+          <div className="mt-12 flex justify-center">
+            <Link 
+              to="/journal" 
+              className="border border-heading px-8 py-3.5 text-xs font-semibold uppercase tracking-widest text-heading hover:bg-heading hover:text-background transition duration-300"
+            >
+              Read Full Journal Stories
+            </Link>
           </div>
 
           {/* Floating background foliage decoration */}
@@ -699,35 +655,7 @@ export default function HomePage() {
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer className="bg-background border-t border-border-sage py-12 px-6 sm:px-12 text-center">
-        <div className="mx-auto max-w-7xl flex flex-col items-center">
-          
-          {/* Footer Logo */}
-          <Link to="/" className="flex flex-col items-center mb-8">
-            <span className="font-marcellus text-xl font-normal tracking-[0.25em] text-heading leading-tight uppercase">
-              AI Wedding<span className="text-accent">.</span>
-            </span>
-            <span className="text-[8px] tracking-[0.4em] font-semibold uppercase text-subtitle mt-0.5">
-              Premium Planner
-            </span>
-          </Link>
-
-          {/* Footer Links */}
-          <div className="flex flex-wrap justify-center gap-8 text-xs font-semibold uppercase tracking-widest text-heading mb-8">
-            <a href="#features" className="hover:text-accent transition duration-300">Features</a>
-            <a href="#about" className="hover:text-accent transition duration-300">About</a>
-            <a href="#gallery" className="hover:text-accent transition duration-300">Gallery</a>
-            <a href="#testimonials" className="hover:text-accent transition duration-300">Journal</a>
-          </div>
-
-          <div className="w-12 h-[1px] bg-border-sage mb-8" />
-
-          {/* Copyright text */}
-          <p className="text-[10px] tracking-wider text-subtitle/90 font-light">
-            © 2026 AI Wedding Planner. All rights reserved. Designed to emulate Webflow Lovio template guidelines.
-          </p>
-        </div>
-      </footer>
+      <Footer />
 
       {/* ─── LIGHTBOX MODAL ─── */}
       {lightboxIndex !== null && (

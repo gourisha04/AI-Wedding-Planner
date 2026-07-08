@@ -80,6 +80,19 @@ const generateMockResponse = (wedding, events) => {
     Other: "Cinematic background score",
   };
 
+  // Sample video URLs per function (Wikimedia Commons CC-BY-SA / MDN CC0)
+  const sampleVideoUrlByFunction = {
+    Engagement: "https://upload.wikimedia.org/wikipedia/commons/3/33/Traditional_dance_Bulawayo_Zimbabwe.webm",
+    Haldi: "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/fb/Mata_Pujan_Rasam_%E2%80%93_A_Sacred_Indian_Wedding_Ritual.webm/Mata_Pujan_Rasam_%E2%80%93_A_Sacred_Indian_Wedding_Ritual.webm.480p.vp9.webm",
+    Mehndi: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+    Mehendi: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+    Sangeet: "https://upload.wikimedia.org/wikipedia/commons/7/73/Chamorro_traditional_dance_at_a_Guamanian_wedding%2C_2020.webm",
+    Wedding: "https://upload.wikimedia.org/wikipedia/commons/b/be/White_Wedding_Dance_-_Igbo_Tribe_-_Anambra_State_-_Nigeria.webm",
+    Reception: "https://upload.wikimedia.org/wikipedia/commons/6/6a/An_Army_Officer%27s_wedding_in_Uganda_02.webm",
+    Cocktail: "https://upload.wikimedia.org/wikipedia/commons/6/6a/An_Army_Officer%27s_wedding_in_Uganda_02.webm",
+    Other: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+  };
+
   // Function-wise video plans
   const functionVideos = functionNames.map((fn) => ({
     functionName: fn,
@@ -88,6 +101,7 @@ const generateMockResponse = (wedding, events) => {
     shots: shotsByFunction[fn] || shotsByFunction.Other,
     mood: moodByFunction[fn] || moodByFunction.Other,
     musicSuggestion: musicByFunction[fn] || musicByFunction.Other,
+    sampleVideoUrl: sampleVideoUrlByFunction[fn] || sampleVideoUrlByFunction.Other,
   }));
 
   // Highlight structure

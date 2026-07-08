@@ -13,6 +13,7 @@ const createWedding = async (req, res) => {
       venue,
       theme,
       budget,
+      mediaFiles,
     } = req.body;
 
     const wedding = await Wedding.create({
@@ -22,6 +23,7 @@ const createWedding = async (req, res) => {
       venue,
       theme,
       budget,
+      mediaFiles,
       createdBy: req.user._id,
     });
 

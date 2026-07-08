@@ -19,6 +19,7 @@ const videoSegmentSchema = new mongoose.Schema({
     default: "Cinematic",
   },
   musicSuggestion: String,
+  sampleVideoUrl: String,
 });
 
 const highlightSegmentSchema = new mongoose.Schema({

@@ -36,3 +36,16 @@ export const updateWedding = async (token, id, data) =>
 
 export const deleteWedding = async (token, id) =>
   (await API.delete(`weddings/${id}`, authHeader(token))).data;
+
+export const uploadMedia = async (token, files) => {
+  const formData = new FormData();
+  files.forEach((file) => {
+    formData.append("media", file);
+  });
+  return (await API.post("uploads", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  })).data;
+};

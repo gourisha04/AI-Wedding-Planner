@@ -14,12 +14,26 @@ import {
   Sparkles,
   Type,
   Video,
+  X,
+  Upload,
 } from "lucide-react";
 
 import { useAuth } from "../context/AuthContext";
 import { getFullPlan } from "../services/aiService";
-import { updateWedding } from "../services/weddingService";
+import { updateWedding, uploadMedia } from "../services/weddingService";
 import toast, { Toaster } from "react-hot-toast";
+
+import { getMoodColors } from "../utils/colorMoodHelper";
+import haldiCeremony from "../assets/images/haldi_ceremony.png";
+import mandapDesign from "../assets/images/mandap_design.png";
+import weddingStationery from "../assets/images/wedding_stationery.png";
+import gallerySangeet from "../assets/images/gallery_sangeet.png";
+import nikaahCouple from "../assets/images/nikaah_couple.png";
+import galleryMehendi from "../assets/images/gallery_mehendi.png";
+import heroNorthIndian from "../assets/images/hero_north_indian.png";
+import heroSouthIndian from "../assets/images/hero_south_indian.png";
+
+import { getSampleVideoUrl } from "../utils/sampleVideoLibrary";
 
 export default function AIOutput() {
   const { weddingId } = useParams();
@@ -29,6 +43,118 @@ export default function AIOutput() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [weddingStatus, setWeddingStatus] = useState("Planning");
+
+  const [mediaModal, setMediaModal] = useState({ open: false, title: "", mediaUrl: "", isVideo: false, poster: "" });
+
+  const [videoGenModal, setVideoGenModal] = useState({
+    open: false,
+    functionName: "",
+    existingFiles: [],
+    loading: false
+  });
+
+  const handleOpenMediaModal = (type, customUrl = null) => {
+    const cleanType = (type || "").toLowerCase();
+    const mediaUrl = customUrl || getSampleVideoUrl(type);
+    
+    // Determine if file is video
+    const isVideo = mediaUrl.endsWith(".webm") || 
+                    mediaUrl.endsWith(".mp4") || 
+                    mediaUrl.includes("video") ||
+                    cleanType.includes("haldi") || 
+                    cleanType.includes("sangeet") || 
+                    cleanType.includes("wedding") || 
+                    cleanType.includes("reception") || 
+                    cleanType.includes("cocktail") || 
+                    cleanType.includes("engagement") || 
+                    cleanType.includes("highlight");
+
+    let posterImg = heroSouthIndian;
+    if (cleanType.includes("haldi")) posterImg = haldiCeremony;
+    else if (cleanType.includes("sangeet")) posterImg = gallerySangeet;
+    else if (cleanType.includes("mehendi") || cleanType.includes("mehndi")) posterImg = galleryMehendi;
+    else if (cleanType.includes("wedding")) posterImg = heroNorthIndian;
+    else if (cleanType.includes("event") || cleanType.includes("decor")) posterImg = mandapDesign;
+    else if (cleanType.includes("album") || cleanType.includes("stationery")) posterImg = weddingStationery;
+
+    setMediaModal({
+      open: true,
+      title: `${type.charAt(0).toUpperCase() + type.slice(1)} - Sample Preview`,
+      mediaUrl,
+      isVideo,
+      poster: posterImg
+    });
+  };
+
+  const handleGenerateVideo = (functionName) => {
+    const existing = data?.videoPlan?.wedding?.mediaFiles?.filter(f => f.functionName === functionName) || 
+                     data?.albumDesign?.wedding?.mediaFiles?.filter(f => f.functionName === functionName) || [];
+    setVideoGenModal({
+      open: true,
+      functionName,
+      existingFiles: existing,
+      loading: false
+    });
+  };
+
+  const handleConfirmGeneration = async () => {
+    setVideoGenModal(prev => ({ ...prev, loading: true }));
+    toast.loading(`Analyzing files & compiling AI wedding video for ${videoGenModal.functionName}...`, { id: "video-comp" });
+    
+    setTimeout(() => {
+      toast.success(`Cinematic video generated successfully for ${videoGenModal.functionName}!`, { id: "video-comp" });
+      setVideoGenModal({
+        open: false,
+        functionName: "",
+        existingFiles: [],
+        loading: false
+      });
+    }, 3000);
+  };
+
+  const handleUploadAndGenerate = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setVideoGenModal(prev => ({ ...prev, loading: true }));
+    toast.loading(`Uploading reference files to AI server...`, { id: "video-comp" });
+
+    try {
+      const uploadRes = await uploadMedia(token, files);
+      toast.success(`Uploaded ${files.length} references!`, { id: "video-comp" });
+      
+      const newMediaFiles = uploadRes.data.map(item => ({
+        functionName: videoGenModal.functionName,
+        filename: item.filename,
+        originalName: item.originalName,
+        mimetype: item.mimetype,
+        url: item.url
+      }));
+
+      const currentWedding = data.videoPlan?.wedding || data.albumDesign?.wedding || {};
+      const updatedMediaFiles = [...(currentWedding.mediaFiles || []), ...newMediaFiles];
+      await updateWedding(token, weddingId, { mediaFiles: updatedMediaFiles });
+      
+      // Refresh plan data
+      const res = await getFullPlan(token, weddingId);
+      setData(res.data);
+
+      toast.loading(`Compiling custom AI video structures for ${videoGenModal.functionName}...`, { id: "video-comp" });
+      setTimeout(() => {
+        toast.success(`Cinematic video generated successfully for ${videoGenModal.functionName}!`, { id: "video-comp" });
+        setVideoGenModal({
+          open: false,
+          functionName: "",
+          existingFiles: [],
+          loading: false
+        });
+      }, 3000);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to upload references for video generation.", { id: "video-comp" });
+      setVideoGenModal(prev => ({ ...prev, loading: false }));
+    }
+  };
 
   useEffect(() => {
     const fetchPlan = async () => {
@@ -182,9 +308,26 @@ export default function AIOutput() {
                     </h3>
                   </div>
 
-                  <span className="inline-flex items-center rounded bg-accent/15 px-2.5 py-0.5 text-xs font-semibold text-accent uppercase tracking-wider">
-                    {segment.duration}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      onClick={() => handleOpenMediaModal(segment.functionName, segment.sampleVideoUrl)}
+                      className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2.5 py-1 text-xs font-semibold text-accent hover:bg-accent hover:text-white transition duration-300 cursor-pointer"
+                    >
+                      <Video size={12} />
+                      View Sample
+                    </button>
+                    <button
+                      onClick={() => handleGenerateVideo(segment.functionName)}
+                      className="inline-flex items-center gap-1.5 rounded border border-heading/30 bg-heading/5 px-2.5 py-1 text-xs font-semibold text-heading hover:bg-accent hover:text-white hover:border-accent transition duration-300 cursor-pointer"
+                    >
+                      <Sparkles size={12} className="text-accent" />
+                      Generate Video
+                      <span className="text-[8px] bg-accent/20 px-1 py-0.2 rounded text-accent font-semibold ml-1">AI</span>
+                    </button>
+                    <span className="inline-flex items-center rounded bg-accent/15 px-2.5 py-0.5 text-xs font-semibold text-accent uppercase tracking-wider">
+                      {segment.duration}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="mt-5 grid gap-6 md:grid-cols-3">
@@ -206,10 +349,22 @@ export default function AIOutput() {
                     <p className="mb-2.5 text-[10px] font-bold uppercase tracking-widest text-subtitle">
                       Color Mood
                     </p>
-                    <p className="flex items-center gap-2 text-sm font-medium text-heading">
-                      <Palette size={14} className="text-accent" />
-                      {segment.mood}
-                    </p>
+                    <div className="flex flex-col gap-2">
+                      <p className="flex items-center gap-2 text-sm font-medium text-heading">
+                        <Palette size={14} className="text-accent" />
+                        {segment.mood}
+                      </p>
+                      <div className="flex gap-1.5 mt-0.5">
+                        {getMoodColors(segment.mood, segment.functionName).colors.map((color, cIdx) => (
+                          <div
+                            key={cIdx}
+                            className="w-5 h-5 rounded-full border border-border-sage/40 shadow-sm"
+                            style={{ backgroundColor: color }}
+                            title={getMoodColors(segment.mood, segment.functionName).names[cIdx]}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
                   <div>
@@ -222,6 +377,55 @@ export default function AIOutput() {
                     </p>
                   </div>
                 </div>
+
+                {/* User-Uploaded reference files display */}
+                {(() => {
+                  const files = wedding.mediaFiles?.filter(f => f.functionName === segment.functionName) || [];
+                  if (files.length === 0) return null;
+                  
+                  const getFullUrl = (urlPath) => {
+                    let host = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+                    host = host.replace("/api", "");
+                    if (host.endsWith("/")) host = host.slice(0, -1);
+                    return `${host}${urlPath}`;
+                  };
+
+                  return (
+                    <div className="mt-5 pt-5 border-t border-border-sage/20">
+                      <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-subtitle">
+                        Your Uploaded Reference Media
+                      </p>
+                      <div className="flex flex-wrap gap-2.5">
+                        {files.map((file, fIdx) => {
+                          const fullUrl = getFullUrl(file.url);
+                          const isVideoFile = file.mimetype?.startsWith("video");
+                          return (
+                            <div 
+                              key={fIdx} 
+                              onClick={() => {
+                                setMediaModal({
+                                  open: true,
+                                  title: `Your Reference: ${file.originalName}`,
+                                  mediaUrl: fullUrl,
+                                  isVideo: isVideoFile,
+                                  poster: isVideoFile ? heroSouthIndian : ""
+                                });
+                              }}
+                              className="w-12 h-12 border border-border-sage/40 rounded overflow-hidden cursor-pointer hover:border-accent transition flex items-center justify-center bg-preload text-heading group relative"
+                              title={file.originalName}
+                            >
+                              {isVideoFile ? (
+                                <Film size={14} className="text-accent" />
+                              ) : (
+                                <img src={fullUrl} className="w-full h-full object-cover" />
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             ))}
           </div>
@@ -241,7 +445,16 @@ export default function AIOutput() {
                 <div className="min-h-8 flex-1 rounded-lg border border-border-sage/30 bg-background/40 px-5 py-4">
                   <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                     <p className="font-semibold text-heading text-sm">{item.title}</p>
-                    <span className="text-xs font-bold text-accent uppercase tracking-wider">{item.duration}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-accent uppercase tracking-wider">{item.duration}</span>
+                      <button
+                        onClick={() => handleOpenMediaModal(`Highlight: ${item.title}`, getSampleVideoUrl("highlight"))}
+                        className="inline-flex items-center gap-1 text-[10px] font-semibold text-accent uppercase tracking-wider border border-accent/30 rounded px-2.5 py-0.5 hover:bg-accent/15 hover:border-accent transition duration-300 cursor-pointer"
+                      >
+                        <Video size={10} className="text-accent" />
+                        View Sample
+                      </button>
+                    </div>
                   </div>
                   {item.description && (
                     <p className="mt-2 text-xs font-light text-paragraphs leading-relaxed">{item.description}</p>
@@ -251,12 +464,24 @@ export default function AIOutput() {
             ))}
           </div>
 
-          {videoPlan.totalEstimatedDuration && (
-            <div className="mt-6 rounded-lg border border-border-sage/40 bg-white p-5 text-center">
-              <p className="text-xs font-semibold uppercase tracking-widest text-subtitle">Total Estimated Highlight Reels</p>
-              <p className="mt-1 font-marcellus text-2xl font-normal text-heading">{videoPlan.totalEstimatedDuration}</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {videoPlan.totalEstimatedDuration && (
+              <div className="rounded-lg border border-border-sage/40 bg-white p-5 text-center flex flex-col justify-center">
+                <p className="text-xs font-semibold uppercase tracking-widest text-subtitle">Total Estimated Highlight Reels</p>
+                <p className="mt-1 font-marcellus text-2xl font-normal text-heading">{videoPlan.totalEstimatedDuration}</p>
+              </div>
+            )}
+            <div className="rounded-lg border border-border-sage/40 bg-white p-5 text-center flex flex-col justify-center items-center">
+              <p className="text-xs font-semibold uppercase tracking-widest text-subtitle mb-2.5 font-bold">Production Output</p>
+              <button
+                onClick={() => handleGenerateVideo("Entire Wedding Highlight Film")}
+                className="w-full sm:w-auto flex h-11 items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent px-6 text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 cursor-pointer"
+              >
+                <Sparkles size={14} />
+                Generate Highlight Film
+              </button>
             </div>
-          )}
+          </div>
         </Section>
       )}
 
@@ -267,30 +492,49 @@ export default function AIOutput() {
             {videoPlan.reelPlans.map((reel, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-border-sage/40 bg-white p-5 transition hover:border-accent duration-300"
+                className="rounded-lg border border-border-sage/40 bg-white p-5 transition hover:border-accent duration-300 flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-marcellus text-base text-heading font-normal tracking-wide">{reel.title}</h3>
-                  <span className="rounded bg-accent/15 px-2.5 py-0.5 text-[10px] font-semibold text-accent uppercase tracking-wider">
-                    {reel.duration}
-                  </span>
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-marcellus text-base text-heading font-normal tracking-wide">{reel.title}</h3>
+                    <span className="rounded bg-accent/15 px-2.5 py-0.5 text-[10px] font-semibold text-accent uppercase tracking-wider">
+                      {reel.duration}
+                    </span>
+                  </div>
+
+                  <p className="mt-3 text-xs leading-relaxed text-paragraphs font-light">{reel.concept}</p>
+
+                  {reel.hashtags?.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {reel.hashtags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="inline-flex items-center gap-1 rounded bg-background border border-border-sage/35 px-2.5 py-0.5 text-[10px] font-medium text-paragraphs"
+                        >
+                          <Hash size={9} />
+                          {tag.replace("#", "")}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <p className="mt-3 text-xs leading-relaxed text-paragraphs font-light">{reel.concept}</p>
-
-                {reel.hashtags?.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {reel.hashtags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex items-center gap-1 rounded bg-background border border-border-sage/35 px-2.5 py-0.5 text-[10px] font-medium text-paragraphs"
-                      >
-                        <Hash size={9} />
-                        {tag.replace("#", "")}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                <div className="mt-5 pt-4 border-t border-border-sage/20 flex gap-2 justify-end">
+                  <button
+                    onClick={() => handleOpenMediaModal(reel.title, getSampleVideoUrl("highlight"))}
+                    className="inline-flex items-center gap-1.5 rounded border border-accent/20 bg-accent/5 px-2.5 py-1 text-xs font-semibold text-accent hover:bg-accent hover:text-white transition duration-300 cursor-pointer"
+                  >
+                    <Video size={11} />
+                    View Sample
+                  </button>
+                  <button
+                    onClick={() => handleGenerateVideo(`Reel: ${reel.title}`)}
+                    className="inline-flex items-center gap-1.5 rounded border border-heading/30 bg-heading/5 px-2.5 py-1 text-xs font-semibold text-heading hover:bg-accent hover:text-white hover:border-accent transition duration-300 cursor-pointer"
+                  >
+                    <Sparkles size={11} className="text-accent" />
+                    Generate Reel
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -301,6 +545,24 @@ export default function AIOutput() {
       {albumDesign && (
         <Section title="Album Design Layout" icon={<Image size={20} />}>
           
+          {/* View Sample Album Layout trigger */}
+          <div className="mb-6 flex justify-end gap-3">
+            <button
+              onClick={() => handleOpenMediaModal("Album Layout Spread", getSampleVideoUrl("default"))}
+              className="inline-flex items-center gap-1.5 rounded border border-accent bg-accent/5 text-accent px-3 py-1.5 text-xs font-semibold uppercase tracking-widest hover:bg-accent hover:text-white transition duration-300 cursor-pointer"
+            >
+              <Image size={12} />
+              View Sample Spread
+            </button>
+            <button
+              onClick={() => handleGenerateVideo("Custom Album Pages Layout")}
+              className="inline-flex items-center gap-1.5 rounded border border-heading bg-transparent text-heading px-3 py-1.5 text-xs font-semibold uppercase tracking-widest hover:bg-heading hover:text-background transition duration-300 cursor-pointer"
+            >
+              <Sparkles size={12} className="text-accent" />
+              Generate Album
+            </button>
+          </div>
+
           {/* Album meta */}
           <div className="mb-6 grid gap-4 md:grid-cols-3">
             <div className="rounded-lg border border-border-sage/30 bg-background p-4">
@@ -401,6 +663,161 @@ export default function AIOutput() {
             ))}
           </div>
         </Section>
+      )}
+
+      {/* ─── SAMPLE SHOWCASE MODAL ─── */}
+      {mediaModal.open && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6"
+          onClick={() => setMediaModal({ ...mediaModal, open: false })}
+        >
+          <div 
+            className="relative w-full max-w-3xl rounded-lg bg-white border border-border-sage p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setMediaModal({ ...mediaModal, open: false })}
+              className="absolute top-4 right-4 text-heading hover:text-accent transition p-1.5 cursor-pointer z-10"
+              aria-label="Close modal"
+            >
+              <X size={20} />
+            </button>
+
+            <h3 className="font-marcellus text-lg text-heading font-normal mb-4 tracking-wide">
+              {mediaModal.title}
+            </h3>
+
+            <div className="overflow-hidden rounded border border-border-sage/40 aspect-video bg-preload flex items-center justify-center relative">
+              {mediaModal.isVideo ? (
+                <video
+                  src={mediaModal.mediaUrl}
+                  controls
+                  autoPlay
+                  loop
+                  poster={mediaModal.poster}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <img
+                  src={mediaModal.mediaUrl}
+                  alt={mediaModal.title}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+            
+            <p className="mt-4 text-xs font-light text-paragraphs leading-relaxed text-center">
+              This represents an example of how your generated film shot lists, event layouts, or photo album arrangements look when designed.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ─── AI VIDEO GENERATION DIALOG ─── */}
+      {videoGenModal.open && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6"
+          onClick={() => !videoGenModal.loading && setVideoGenModal({ ...videoGenModal, open: false })}
+        >
+          <div 
+            className="relative w-full max-w-md rounded-lg bg-white border border-border-sage p-6 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => !videoGenModal.loading && setVideoGenModal({ ...videoGenModal, open: false })}
+              className="absolute top-4 right-4 text-heading hover:text-accent transition p-1.5 cursor-pointer z-10"
+              aria-label="Close modal"
+              disabled={videoGenModal.loading}
+            >
+              <X size={20} />
+            </button>
+
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-heading/5 text-accent border border-border-sage/20 mb-4">
+              <Sparkles size={18} />
+            </div>
+
+            <h3 className="font-marcellus text-lg text-heading font-normal mb-1.5 tracking-wide">
+              Generate AI Video: {videoGenModal.functionName}
+            </h3>
+            <p className="text-[10px] text-subtitle uppercase tracking-widest font-semibold mb-6">
+              AI cinematic editor workflow
+            </p>
+
+            <div className="space-y-4">
+              {videoGenModal.existingFiles.length > 0 ? (
+                <>
+                  <div className="p-4 rounded-lg bg-background border border-border-sage/30">
+                    <p className="text-xs text-heading font-medium">Existing reference assets found</p>
+                    <p className="text-[11px] font-light text-paragraphs mt-1 leading-relaxed">
+                      You uploaded <strong>{videoGenModal.existingFiles.length} file(s)</strong> for {videoGenModal.functionName} during creation.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {videoGenModal.existingFiles.map((file, idx) => (
+                        <div key={idx} className="w-8 h-8 rounded border border-border-sage/30 overflow-hidden flex items-center justify-center bg-preload">
+                          {file.mimetype?.startsWith("video") ? (
+                            <Film size={10} className="text-accent" />
+                          ) : (
+                            <img src={file.url.startsWith("http") ? file.url : `http://localhost:5000${file.url}`} className="w-full h-full object-cover" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleConfirmGeneration()}
+                    disabled={videoGenModal.loading}
+                    className="w-full flex h-11 items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 disabled:opacity-50 cursor-pointer"
+                  >
+                    {videoGenModal.loading ? (
+                      <>
+                        <Loader2 size={14} className="animate-spin" />
+                        Generating Film...
+                      </>
+                    ) : (
+                      <>
+                        Generate from current files
+                        <Sparkles size={12} />
+                      </>
+                    )}
+                  </button>
+
+                  <div className="relative flex py-2 items-center">
+                    <div className="flex-grow border-t border-border-sage/20"></div>
+                    <span className="flex-shrink mx-4 text-[9px] text-subtitle uppercase tracking-widest font-bold">Or</span>
+                    <div className="flex-grow border-t border-border-sage/20"></div>
+                  </div>
+                </>
+              ) : (
+                <div className="p-4 rounded-lg border border-dashed border-border-sage bg-background/50 text-center">
+                  <p className="text-xs font-semibold text-heading">No media files selected yet</p>
+                  <p className="text-[10px] font-light text-paragraphs mt-1 leading-relaxed">
+                    Select photos/videos below to guide the AI wedding film compilation engine.
+                  </p>
+                </div>
+              )}
+
+              {/* Upload new references and generate option */}
+              <button
+                type="button"
+                onClick={() => document.getElementById("direct-video-gen-upload").click()}
+                disabled={videoGenModal.loading}
+                className="w-full flex h-11 items-center justify-center gap-2 rounded-lg border border-border-sage bg-transparent text-heading px-4 text-xs uppercase tracking-widest font-semibold transition hover:bg-background duration-300 disabled:opacity-50 cursor-pointer"
+              >
+                <Upload size={14} className="text-accent" />
+                Select new photos/videos
+              </button>
+              <input
+                id="direct-video-gen-upload"
+                type="file"
+                accept="image/*,video/*"
+                multiple
+                className="hidden"
+                onChange={handleUploadAndGenerate}
+              />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

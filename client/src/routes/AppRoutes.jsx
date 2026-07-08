@@ -1,6 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import HomePage from "../pages/HomePage";
+import FeaturesPage from "../pages/FeaturesPage";
+import AboutPage from "../pages/AboutPage";
+import GalleryPage from "../pages/GalleryPage";
+import JournalPage from "../pages/JournalPage";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Dashboard from "../pages/Dashboard";
@@ -18,6 +22,10 @@ export default function AppRoutes() {
       {/* Public Routes */}
 
       <Route path="/" element={<HomePage />} />
+      <Route path="/features" element={<FeaturesPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/gallery" element={<GalleryPage />} />
+      <Route path="/journal" element={<JournalPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 

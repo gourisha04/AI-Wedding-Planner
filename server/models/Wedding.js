@@ -33,6 +33,15 @@ const weddingSchema = new mongoose.Schema(
       enum: ["Planning", "Ongoing", "Completed"],
       default: "Planning",
     },
+    mediaFiles: [
+      {
+        functionName: { type: String },
+        filename: { type: String },
+        originalName: { type: String },
+        mimetype: { type: String },
+        url: { type: String },
+      },
+    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
