@@ -693,6 +693,8 @@ export default function AIOutput() {
                   src={mediaModal.mediaUrl}
                   controls
                   autoPlay
+                  muted
+                  playsInline
                   loop
                   poster={mediaModal.poster}
                   className="w-full h-full object-cover"

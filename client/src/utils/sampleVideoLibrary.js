@@ -10,32 +10,32 @@
  */
 
 const sampleVideos = {
-  // Indian wedding ritual — vibrant, colorful, families together
-  haldi: "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/fb/Mata_Pujan_Rasam_%E2%80%93_A_Sacred_Indian_Wedding_Ritual.webm/Mata_Pujan_Rasam_%E2%80%93_A_Sacred_Indian_Wedding_Ritual.webm.480p.vp9.webm",
+  // Indian wedding flower shower / celebration
+  haldi: "https://assets.mixkit.co/videos/preview/mixkit-people-throwing-flower-petals-at-a-wedding-4892-large.mp4",
 
-  // Traditional Chamorro dance at a Guamanian wedding — festive group dance
-  sangeet: "https://upload.wikimedia.org/wikipedia/commons/7/73/Chamorro_traditional_dance_at_a_Guamanian_wedding%2C_2020.webm",
+  // Festive party dance
+  sangeet: "https://assets.mixkit.co/videos/preview/mixkit-dancing-at-a-wedding-party-4890-large.mp4",
 
-  // White wedding dance — Igbo tribe Nigeria — couple celebration
-  wedding: "https://upload.wikimedia.org/wikipedia/commons/b/be/White_Wedding_Dance_-_Igbo_Tribe_-_Anambra_State_-_Nigeria.webm",
+  // Couple hand-holding / wedding walk
+  wedding: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-holding-hands-4882-large.mp4",
 
-  // Army officer's wedding in Uganda — celebration dance
-  reception: "https://upload.wikimedia.org/wikipedia/commons/6/6a/An_Army_Officer%27s_wedding_in_Uganda_02.webm",
+  // Smiling wedding couple reception entry
+  reception: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-smiling-and-looking-at-each-other-4886-large.mp4",
 
-  // Floral bloom — evocative of mehndi patterns and beauty
-  mehendi: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+  // Henna design application
+  mehendi: "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-bride-being-painted-with-henna-4888-large.mp4",
 
-  // Traditional dance Bulawayo Zimbabwe — joyful engagement celebration
-  engagement: "https://upload.wikimedia.org/wikipedia/commons/3/33/Traditional_dance_Bulawayo_Zimbabwe.webm",
+  // Putting wedding ring on finger
+  engagement: "https://assets.mixkit.co/videos/preview/mixkit-groom-putting-the-wedding-ring-on-the-brides-finger-4894-large.mp4",
 
-  // Same as reception but different context — relaxed party atmosphere
-  cocktail: "https://upload.wikimedia.org/wikipedia/commons/6/6a/An_Army_Officer%27s_wedding_in_Uganda_02.webm",
+  // Reception cocktail party smiling
+  cocktail: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-smiling-and-looking-at-each-other-4886-large.mp4",
 
-  // Lightweight 240p version — for highlight reel previews
-  highlight: "https://upload.wikimedia.org/wikipedia/commons/transcoded/f/fb/Mata_Pujan_Rasam_%E2%80%93_A_Sacred_Indian_Wedding_Ritual.webm/Mata_Pujan_Rasam_%E2%80%93_A_Sacred_Indian_Wedding_Ritual.webm.240p.vp9.webm",
+  // Wedding cinematic highlight
+  highlight: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-holding-hands-4882-large.mp4",
 
   // Default fallback
-  default: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm",
+  default: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-holding-hands-4882-large.mp4",
 };
 
 /**
