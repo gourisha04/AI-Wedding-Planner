@@ -11,31 +11,31 @@
 
 const sampleVideos = {
   // Indian wedding flower shower / celebration
-  haldi: "https://assets.mixkit.co/videos/preview/mixkit-people-throwing-flower-petals-at-a-wedding-4892-large.mp4",
+  haldi: "https://assets.mixkit.co/videos/4892/4892-720.mp4",
 
   // Festive party dance
-  sangeet: "https://assets.mixkit.co/videos/preview/mixkit-dancing-at-a-wedding-party-4890-large.mp4",
+  sangeet: "https://assets.mixkit.co/videos/4890/4890-720.mp4",
 
   // Couple hand-holding / wedding walk
-  wedding: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-holding-hands-4882-large.mp4",
+  wedding: "https://assets.mixkit.co/videos/4882/4882-720.mp4",
 
   // Smiling wedding couple reception entry
-  reception: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-smiling-and-looking-at-each-other-4886-large.mp4",
+  reception: "https://assets.mixkit.co/videos/4886/4886-720.mp4",
 
   // Henna design application
-  mehendi: "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-bride-being-painted-with-henna-4888-large.mp4",
+  mehendi: "https://assets.mixkit.co/videos/4888/4888-720.mp4",
 
   // Putting wedding ring on finger
-  engagement: "https://assets.mixkit.co/videos/preview/mixkit-groom-putting-the-wedding-ring-on-the-brides-finger-4894-large.mp4",
+  engagement: "https://assets.mixkit.co/videos/4894/4894-720.mp4",
 
   // Reception cocktail party smiling
-  cocktail: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-smiling-and-looking-at-each-other-4886-large.mp4",
+  cocktail: "https://assets.mixkit.co/videos/4886/4886-720.mp4",
 
   // Wedding cinematic highlight
-  highlight: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-holding-hands-4882-large.mp4",
+  highlight: "https://assets.mixkit.co/videos/4882/4882-720.mp4",
 
   // Default fallback
-  default: "https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-holding-hands-4882-large.mp4",
+  default: "https://assets.mixkit.co/videos/4882/4882-720.mp4",
 };
 
 /**

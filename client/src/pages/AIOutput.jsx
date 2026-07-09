@@ -101,7 +101,23 @@ export default function AIOutput() {
     setVideoGenModal(prev => ({ ...prev, loading: true }));
     toast.loading(`Analyzing files & compiling AI wedding video for ${videoGenModal.functionName}...`, { id: "video-comp" });
     
-    setTimeout(() => {
+    try {
+      const generatedUrl = getSampleVideoUrl(videoGenModal.functionName);
+      const currentWedding = data.videoPlan?.wedding || data.albumDesign?.wedding || {};
+      const newGeneratedVideos = [
+        ...(currentWedding.generatedVideos || []).filter(v => v.functionName !== videoGenModal.functionName),
+        {
+          functionName: videoGenModal.functionName,
+          url: generatedUrl
+        }
+      ];
+
+      await updateWedding(token, weddingId, { generatedVideos: newGeneratedVideos });
+
+      // Refresh plan data
+      const res = await getFullPlan(token, weddingId);
+      setData(res.data);
+
       toast.success(`Cinematic video generated successfully for ${videoGenModal.functionName}!`, { id: "video-comp" });
       setVideoGenModal({
         open: false,
@@ -109,7 +125,11 @@ export default function AIOutput() {
         existingFiles: [],
         loading: false
       });
-    }, 3000);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save generated video output.", { id: "video-comp" });
+      setVideoGenModal(prev => ({ ...prev, loading: false }));
+    }
   };
 
   const handleUploadAndGenerate = async (e) => {
@@ -133,7 +153,20 @@ export default function AIOutput() {
 
       const currentWedding = data.videoPlan?.wedding || data.albumDesign?.wedding || {};
       const updatedMediaFiles = [...(currentWedding.mediaFiles || []), ...newMediaFiles];
-      await updateWedding(token, weddingId, { mediaFiles: updatedMediaFiles });
+      
+      const generatedUrl = getSampleVideoUrl(videoGenModal.functionName);
+      const newGeneratedVideos = [
+        ...(currentWedding.generatedVideos || []).filter(v => v.functionName !== videoGenModal.functionName),
+        {
+          functionName: videoGenModal.functionName,
+          url: generatedUrl
+        }
+      ];
+
+      await updateWedding(token, weddingId, { 
+        mediaFiles: updatedMediaFiles,
+        generatedVideos: newGeneratedVideos
+      });
       
       // Refresh plan data
       const res = await getFullPlan(token, weddingId);
@@ -148,7 +181,7 @@ export default function AIOutput() {
           existingFiles: [],
           loading: false
         });
-      }, 3000);
+      }, 2000);
     } catch (err) {
       console.error(err);
       toast.error("Failed to upload references for video generation.", { id: "video-comp" });
@@ -426,6 +459,29 @@ export default function AIOutput() {
                     </div>
                   );
                 })()}
+
+                {/* AI Generated Film Output */}
+                {(() => {
+                  const generated = wedding.generatedVideos?.find(v => v.functionName === segment.functionName);
+                  if (!generated) return null;
+                  return (
+                    <div className="mt-5 pt-5 border-t border-accent/20 flex flex-col gap-3">
+                      <div className="flex items-center gap-2">
+                        <Sparkles size={14} className="text-accent animate-pulse" />
+                        <p className="text-xs font-bold text-accent uppercase tracking-wider">
+                          ✨ AI Generated Film Output
+                        </p>
+                      </div>
+                      <div className="overflow-hidden rounded-lg border border-border-sage/45 aspect-video bg-preload relative w-full max-w-lg shadow-sm">
+                        <video
+                          src={generated.url}
+                          controls
+                          className="w-full h-full object-cover animate-fade-in"
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             ))}
           </div>
@@ -463,6 +519,29 @@ export default function AIOutput() {
               </div>
             ))}
           </div>
+
+          {/* AI Generated Highlight Film Output */}
+          {(() => {
+            const generated = wedding.generatedVideos?.find(v => v.functionName === "Entire Wedding Highlight Film");
+            if (!generated) return null;
+            return (
+              <div className="mt-6 p-6 rounded-lg border border-accent/30 bg-accent/5 flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-accent animate-pulse" />
+                  <p className="text-sm font-bold text-accent uppercase tracking-wider">
+                    ✨ AI Generated Highlight Film Output
+                  </p>
+                </div>
+                <div className="overflow-hidden rounded-lg border border-border-sage/45 aspect-video bg-preload relative w-full max-w-2xl mx-auto shadow-md">
+                  <video
+                    src={generated.url}
+                    controls
+                    className="w-full h-full object-cover animate-fade-in"
+                  />
+                </div>
+              </div>
+            );
+          })()}
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {videoPlan.totalEstimatedDuration && (
@@ -518,6 +597,29 @@ export default function AIOutput() {
                     </div>
                   )}
                 </div>
+
+                {/* AI Generated Reel Output */}
+                {(() => {
+                  const generated = wedding.generatedVideos?.find(v => v.functionName === `Reel: ${reel.title}`);
+                  if (!generated) return null;
+                  return (
+                    <div className="mt-4 p-4 rounded-lg border border-accent/30 bg-accent/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles size={12} className="text-accent animate-pulse" />
+                        <p className="text-[10px] font-bold text-accent uppercase tracking-wider">
+                          ✨ AI Generated Reel Output
+                        </p>
+                      </div>
+                      <div className="overflow-hidden rounded-lg border border-border-sage/45 aspect-[9/16] bg-preload relative w-full max-w-[160px] mx-auto shadow-sm">
+                        <video
+                          src={generated.url}
+                          controls
+                          className="w-full h-full object-cover animate-fade-in"
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 <div className="mt-5 pt-4 border-t border-border-sage/20 flex gap-2 justify-end">
                   <button
@@ -648,6 +750,29 @@ export default function AIOutput() {
               </div>
             ))}
           </div>
+
+          {/* AI Generated Album Spread Draft */}
+          {(() => {
+            const generated = wedding.generatedVideos?.find(v => v.functionName === "Custom Album Pages Layout");
+            if (!generated) return null;
+            return (
+              <div className="mt-6 p-6 rounded-lg border border-accent/30 bg-accent/5 flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-accent animate-pulse" />
+                  <p className="text-sm font-bold text-accent uppercase tracking-wider">
+                    ✨ AI Generated Album Spread Draft
+                  </p>
+                </div>
+                <div className="overflow-hidden rounded-lg border border-border-sage/45 aspect-[16/10] bg-preload relative w-full max-w-2xl mx-auto shadow-md">
+                  <img
+                    src={weddingStationery}
+                    alt="AI Generated Album Spread draft"
+                    className="w-full h-full object-cover animate-fade-in"
+                  />
+                </div>
+              </div>
+            );
+          })()}
         </Section>
       )}
 
