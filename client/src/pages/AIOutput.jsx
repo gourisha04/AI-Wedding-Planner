@@ -871,60 +871,52 @@ export default function AIOutput() {
             </p>
 
             <div className="space-y-4">
-              {videoGenModal.existingFiles.length > 0 ? (
-                <>
-                  <div className="p-4 rounded-lg bg-background border border-border-sage/30">
-                    <p className="text-xs text-heading font-medium">Existing reference assets found</p>
-                    <p className="text-[11px] font-light text-paragraphs mt-1 leading-relaxed">
-                      You uploaded <strong>{videoGenModal.existingFiles.length} file(s)</strong> for {videoGenModal.functionName} during creation.
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {videoGenModal.existingFiles.map((file, idx) => (
-                        <div key={idx} className="w-8 h-8 rounded border border-border-sage/30 overflow-hidden flex items-center justify-center bg-preload">
-                          {file.mimetype?.startsWith("video") ? (
-                            <Film size={10} className="text-accent" />
-                          ) : (
-                            <img src={file.url.startsWith("http") ? file.url : `http://localhost:5000${file.url}`} className="w-full h-full object-cover" />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => handleConfirmGeneration()}
-                    disabled={videoGenModal.loading}
-                    className="w-full flex h-11 items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 disabled:opacity-50 cursor-pointer"
-                  >
-                    {videoGenModal.loading ? (
-                      <>
-                        <Loader2 size={14} className="animate-spin" />
-                        Generating Film...
-                      </>
-                    ) : (
-                      <>
-                        Generate from current files
-                        <Sparkles size={12} />
-                      </>
-                    )}
-                  </button>
-
-                  <div className="relative flex py-2 items-center">
-                    <div className="flex-grow border-t border-border-sage/20"></div>
-                    <span className="flex-shrink mx-4 text-[9px] text-subtitle uppercase tracking-widest font-bold">Or</span>
-                    <div className="flex-grow border-t border-border-sage/20"></div>
-                  </div>
-                </>
-              ) : (
-                <div className="p-4 rounded-lg border border-dashed border-border-sage bg-background/50 text-center">
-                  <p className="text-xs font-semibold text-heading">No media files selected yet</p>
-                  <p className="text-[10px] font-light text-paragraphs mt-1 leading-relaxed">
-                    Select photos/videos below to guide the AI wedding film compilation engine.
+              {videoGenModal.existingFiles.length > 0 && (
+                <div className="p-4 rounded-lg bg-background border border-border-sage/30">
+                  <p className="text-xs text-heading font-medium">Existing reference assets found</p>
+                  <p className="text-[11px] font-light text-paragraphs mt-1 leading-relaxed">
+                    You uploaded <strong>{videoGenModal.existingFiles.length} file(s)</strong> for {videoGenModal.functionName} during creation.
                   </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {videoGenModal.existingFiles.map((file, idx) => (
+                      <div key={idx} className="w-8 h-8 rounded border border-border-sage/30 overflow-hidden flex items-center justify-center bg-preload">
+                        {file.mimetype?.startsWith("video") ? (
+                          <Film size={10} className="text-accent" />
+                        ) : (
+                          <img src={file.url.startsWith("http") ? file.url : `http://localhost:5000${file.url}`} className="w-full h-full object-cover" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
-              {/* Upload new references and generate option */}
+              {/* Primary: Generate Video button — always available */}
+              <button
+                onClick={() => handleConfirmGeneration()}
+                disabled={videoGenModal.loading}
+                className="w-full flex h-11 items-center justify-center gap-2 rounded-lg bg-accent text-white border border-accent text-xs uppercase tracking-widest font-semibold shadow-sm transition hover:bg-heading hover:border-heading duration-300 disabled:opacity-50 cursor-pointer"
+              >
+                {videoGenModal.loading ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    Generating Film...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={12} />
+                    {videoGenModal.existingFiles.length > 0 ? "Generate from current files" : "Generate AI Video"}
+                  </>
+                )}
+              </button>
+
+              <div className="relative flex py-1 items-center">
+                <div className="flex-grow border-t border-border-sage/20"></div>
+                <span className="flex-shrink mx-4 text-[9px] text-subtitle uppercase tracking-widest font-bold">Or upload media first</span>
+                <div className="flex-grow border-t border-border-sage/20"></div>
+              </div>
+
+              {/* Secondary: Upload new references option */}
               <button
                 type="button"
                 onClick={() => document.getElementById("direct-video-gen-upload").click()}
@@ -932,7 +924,7 @@ export default function AIOutput() {
                 className="w-full flex h-11 items-center justify-center gap-2 rounded-lg border border-border-sage bg-transparent text-heading px-4 text-xs uppercase tracking-widest font-semibold transition hover:bg-background duration-300 disabled:opacity-50 cursor-pointer"
               >
                 <Upload size={14} className="text-accent" />
-                Select new photos/videos
+                Select photos/videos & generate
               </button>
               <input
                 id="direct-video-gen-upload"

@@ -41,35 +41,51 @@ const upload = multer({
 });
 
 // POST /api/uploads — Upload up to 10 files
-router.post("/", protect, upload.array("media", 10), (req, res) => {
-  try {
-    if (!req.files || req.files.length === 0) {
+router.post("/", protect, (req, res, next) => {
+  upload.array("media", 10)(req, res, (err) => {
+    if (err) {
+      console.error("Multer Upload Error:", err);
+      if (err instanceof multer.MulterError) {
+        return res.status(400).json({
+          success: false,
+          message: `Upload error: ${err.message}`,
+        });
+      }
       return res.status(400).json({
         success: false,
-        message: "No files uploaded.",
+        message: err.message || "File upload failed.",
       });
     }
 
-    const fileData = req.files.map((file) => ({
-      filename: file.filename,
-      originalName: file.originalname,
-      mimetype: file.mimetype,
-      size: file.size,
-      url: `/uploads/${file.filename}`,
-    }));
+    try {
+      if (!req.files || req.files.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "No files uploaded.",
+        });
+      }
 
-    res.status(201).json({
-      success: true,
-      message: `${fileData.length} file(s) uploaded successfully.`,
-      data: fileData,
-    });
-  } catch (error) {
-    console.error("Upload Error:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+      const fileData = req.files.map((file) => ({
+        filename: file.filename,
+        originalName: file.originalname,
+        mimetype: file.mimetype,
+        size: file.size,
+        url: `/uploads/${file.filename}`,
+      }));
+
+      res.status(201).json({
+        success: true,
+        message: `${fileData.length} file(s) uploaded successfully.`,
+        data: fileData,
+      });
+    } catch (error) {
+      console.error("Upload Error:", error);
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  });
 });
 
 module.exports = router;
